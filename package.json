@@ -12,6 +12,8 @@
   "dependencies": {
     "@babel/runtime": "^7.14.0",
     "@ledgerhq/hw-transport-webusb": "^5.53.0",
+    "@lunie/cosmos-api": "^0.2.5",
+    "@lunie/cosmos-js": "0.0.22",
     "@types/meteor-universe-i18n": "^1.14.5",
     "babel-polyfill": "^6.26.0",
     "bech32": "^1.1.4",

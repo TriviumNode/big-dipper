@@ -1,6 +1,6 @@
 /* eslint-disable react/no-unused-prop-types */
 import qs from 'querystring';
-import Cosmos from "@lunie/cosmos-js"
+import Cosmos from "@lunie/cosmos-api"
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { Button, Spinner, TabContent, TabPane, Row, Col, Modal, ModalHeader,
