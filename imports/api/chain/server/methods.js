@@ -41,6 +41,8 @@ Meteor.methods({
     },
     'chain.updateStatus': function(){
         this.unblock();
+
+        //update status
         let url = RPC+'/status';
         try{
             let response = HTTP.get(url);
@@ -69,14 +71,27 @@ Meteor.methods({
             }
             chain.activeVotingPower = activeVP;
 
+            // update staking params
+            try {
+                url = LCD + '/staking/parameters';
+                response = HTTP.get(url);
+                let stakingParams = JSON.parse(response.content).result;
+                //chain.staking = JSON.parse(response.content).result;
+                chain.staking = stakingParams;
+                chain.maxValidators = stakingParams.max_validators;
+            }
+            catch (e) {
+                console.log(e);
+            }
 
-            Chain.update({chainId:chain.chainId}, {$set:chain}, {upsert: true});
+
             // Get chain states
             if (parseInt(chain.latestBlockHeight) > 0){
                 let chainStates = {};
                 chainStates.height = parseInt(status.sync_info.latest_block_height);
                 chainStates.time = new Date(status.sync_info.latest_block_time);
 
+                //Update staking pool
                 url = LCD + '/staking/pool';
                 try{
                     response = HTTP.get(url);
@@ -91,7 +106,9 @@ Meteor.methods({
                     console.log(e);
                 }
 
+                //If staking coin defined
                 if ( Coin.StakingCoin.denom ) {
+
                     if (Meteor.settings.public.modules.supply){
                         url = LCD + '/supply/total/'+ Coin.StakingCoin.denom;
                         try{
@@ -106,6 +123,7 @@ Meteor.methods({
                     }
 
                     if (Meteor.settings.public.modules.distribution){
+                        //Update community pool
                         url = LCD + '/distribution/community_pool';
                         try {
                             response = HTTP.get(url);
@@ -119,14 +137,33 @@ Meteor.methods({
                                     })
                                 })
                             }
-                        }
-                        catch (e){
+                        } catch (e){
                             console.log(url);
                             console.log(e.response.content)
                         }
+
+                        // update distribution params
+                        try {
+                            url = LCD + '/distribution/parameters';
+                            response = HTTP.get(url);
+                            chain.distribution = JSON.parse(response.content).result;
+                        } catch (e) {
+                            console.log(e);
+                        }
                     }
 
+                    // update mint params
                     if (Meteor.settings.public.modules.minting){
+                        try {
+                            url = LCD + '/minting/parameters';
+                            response = HTTP.get(url);
+                            let mint = JSON.parse(response.content).result
+                            chain.mint = mint;
+                        }
+                        catch (e) {
+                            console.log(e);
+                        }
+
                         url = LCD + '/minting/inflation';
                         try{
                             response = HTTP.get(url);
@@ -153,10 +190,47 @@ Meteor.methods({
                             console.log(e.response.content);
                         }
                     }
+
+                    if (Meteor.settings.public.modules.gov){
+                        chain.gov = {};
+                        url = LCD + '/gov/parameters/tallying';
+                        try {
+                            response = HTTP.get(url);
+                            let tallying = JSON.parse(response.content);
+                            if (tallying) {
+                                chain.gov.tallyParams = (tallying.result)
+                            }
+                        }
+                        catch (e) {
+                            console.log(url);
+                            console.log(e);
+                        }
+        
+                        try {
+                            url = LCD + '/gov/parameters/deposit';
+                            response = HTTP.get(url);
+                            let gov = JSON.parse(response.content).result;
+                            chain.gov.depositParams = gov;
+                        }
+                        catch (e) {
+                            console.log(e);
+                        }
+                        try {
+                            url = LCD + '/gov/parameters/voting';
+                            response = HTTP.get(url);
+                            let gov = JSON.parse(response.content).result;
+                            chain.gov.votingParams = gov;
+                        }
+                        catch (e) {
+                            console.log(e);
+                        }
+                    }
                 }
 
                 ChainStates.insert(chainStates);
             }
+
+            Chain.update({chainId:chain.chainId}, {$set:chain}, {upsert: true});
 
             // chain.totalVotingPower = totalVP;
 
