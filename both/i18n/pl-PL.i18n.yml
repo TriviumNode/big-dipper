@@ -6,6 +6,7 @@ common:
     voter: 'Głosujący'
     votingPower: 'Siła Głosu'
     addresses: 'Adres'
+    address: 'Address'
     amounts: 'Kwota'
     delegators: 'Delegatorzy'
     block: 'blok'

@@ -7,6 +7,7 @@ import i18n from 'meteor/universe:i18n';
 import Coin from '/both/utils/coins.js'
 import TimeStamp from '../components/TimeStamp.jsx';
 import { SubmitProposalButton } from '../ledger/LedgerActions.jsx';
+import { KeplrSubmitProposalButton } from '../keplr/KeplrActions.jsx';
 
 const T = i18n.createComponent();
 
@@ -38,7 +39,8 @@ export default class List extends Component{
         }
         else{
             this.state = {
-                proposals: null
+                proposals: null,
+                wallet: localStorage.getItem(CURRENTUSERWALLET) || ''
             }
         }
     }
@@ -54,6 +56,7 @@ export default class List extends Component{
         if (this.props.proposals != prevState.proposals){
             if (this.props.proposals.length > 0){
                 this.setState({
+                    wallet: localStorage.getItem(CURRENTUSERWALLET) || '',
                     proposals: this.props.proposals.map((proposal, i) => {
                         return <ProposalRow key={i} index={i} proposal={proposal} />
                     })
@@ -69,7 +72,13 @@ export default class List extends Component{
         else{
             return (
                 <div>
-                    {this.state.user?<SubmitProposalButton history={this.props.history}/>:null}
+                    {/*this.state.user?<SubmitProposalButton history={this.props.history}/>:null*/}
+                    {this.state.wallet.includes("ledger")?
+                        <SubmitProposalButton history={this.props.history}/>
+                    :''}
+                    {this.state.wallet.includes("keplr")?
+                        <KeplrSubmitProposalButton history={this.props.history}/>
+                    :''}
                     <Table striped className="proposal-list">
                         <thead>
                             <tr>

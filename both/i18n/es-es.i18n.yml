@@ -6,6 +6,7 @@ common:
     voter: 'Votante'
     votingPower: 'Poder de votación'
     addresses: 'Direcciones'
+    address: 'Direccion'
     amounts: 'Cantidades'
     delegators: 'delegadores'
     block: 'bloque'

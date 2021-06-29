@@ -13,6 +13,7 @@ import { render } from 'react-dom';
 
 CURRENTUSERADDR = 'ledgerUserAddress';
 CURRENTUSERPUBKEY = 'ledgerUserPubKey';
+CURRENTUSERWALLET = 'nc'; 
 
 // import { onPageLoad } from 'meteor/server-render';
 

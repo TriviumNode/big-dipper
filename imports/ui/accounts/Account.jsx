@@ -9,6 +9,7 @@ import AccountTransactions from '../components/TransactionsContainer.js';
 import ChainStates from '../components/ChainStatesContainer.js'
 import { Helmet } from 'react-helmet';
 import { WithdrawButton, TransferButton } from '../ledger/LedgerActions.jsx';
+import { KeplrWithdrawButton, KeplrTransferButton } from '../keplr/KeplrActions.jsx';
 import i18n from 'meteor/universe:i18n';
 import Coin from '/both/utils/coins.js'
 
@@ -37,6 +38,7 @@ export default class AccountDetails extends Component{
             total: [defaultCoin],
             price: 0,
             user: localStorage.getItem(CURRENTUSERADDR),
+            wallet: localStorage.getItem(CURRENTUSERWALLET),
             commission: [defaultCoin],
             denom: '',
             rewardsForEachDel: [defaultCoin],
@@ -336,9 +338,21 @@ export default class AccountDetails extends Component{
                                 </Col>
                                 <Col md={6} lg={4} className="total d-flex flex-column justify-content-end">
                                     {this.state.user?<Row>
-                                        <Col xs={12}><TransferButton history={this.props.history} address={this.state.address} denom={this.state.denom}/></Col>
-                                        {this.state.user===this.state.address?<Col xs={12}><WithdrawButton  history={this.props.history} rewards={this.state.rewards} commission={this.state.commission} address={this.state.operator_address} denom={this.state.denom}/></Col>:null}
-                                    </Row>:null}
+                                        <Col xs={12}>
+                                            {this.state.wallet.includes("keplr")?
+                                                <KeplrTransferButton history={this.props.history} address={this.state.address} denom={this.state.denom}/>
+                                            :
+                                                <TransferButton history={this.props.history} address={this.state.address} denom={this.state.denom}/>
+                                            }
+                                        </Col>
+                                        {this.state.user===this.state.address?<Col xs={12}>
+                                            {this.state.wallet.includes("keplr")?
+                                                <KeplrWithdrawButton  history={this.props.history} rewards={this.state.rewards} commission={this.state.commission} address={this.state.operator_address} denom={this.state.denom}/>
+                                            :
+                                                <WithdrawButton  history={this.props.history} rewards={this.state.rewards} commission={this.state.commission} address={this.state.operator_address} denom={this.state.denom}/>
+                                            }
+                                        </Col> : null }
+                                    </Row> : null }
                                     <Row>
                                         <Col xs={4} className="label d-flex align-self-end"><div className="infinity" /><T>accounts.total</T></Col>
                                         <Col xs={8} className="value text-right">{this.findCoin(this.state.total)}</Col>

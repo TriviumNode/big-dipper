@@ -1,6 +1,7 @@
 /* eslint-disable no-tabs */
 import { Meteor } from 'meteor/meteor';
 import numbro from 'numbro';
+import BigNumber from 'bignumber.js'
 
 autoformat = (value) => {
     let formatter = '0,0.0000';
@@ -56,6 +57,18 @@ toString (precision) {
         return `${numbro(this.amount).format('0,0.0000' )} ${this._coin.denom}`;
     } else {
         return `${precision?numbro(this.stakingAmount).format('0,0.' + '0'.repeat(precision)):autoformat(this.stakingAmount)} ${this._coin.displayName}`
+    }
+}
+
+// Return value in corresponding staking denom (no multiplications)
+convertToString(precision){
+    if(precision){
+        return `${precision ? numbro(this._amount).format('0,0.' + '0'.repeat(precision)) : autoformat(this._amount)} ${this._coin.displayName}`	
+
+    }
+    else{
+        let	amount = new BigNumber(this.amount).dividedBy(this._coin.fraction).toFormat()
+        return `${amount} ${this._coin.displayName}`;
     }
 }
 

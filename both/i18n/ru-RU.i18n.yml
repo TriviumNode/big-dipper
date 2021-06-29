@@ -6,6 +6,7 @@ common:
     voter: 'избиратель'
     votingPower: 'право голоса'
     addresses: 'Адреса'
+    address: 'Address'
     amounts: 'Суммы'
     delegators: 'делегаторы'
     block: 'блок'

@@ -1,18 +1,18 @@
 import React, { Component } from 'react';
 import { Button, Spinner, TabContent, TabPane, Row, Col, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-import {Ledger} from './ledger.js';
+import {Keplr} from './keplr.js';
 import i18n from 'meteor/universe:i18n';
 
 const T = i18n.createComponent();
 
-class LedgerModal extends React.Component {
+class KeplrModal extends React.Component {
     constructor(props){
         super(props);
         this.state = {
             loading: false,
             activeTab: '1'
         };
-        this.ledger = new Ledger({testModeAllowed: false});
+        this.keplr = new Keplr({testModeAllowed: false});
     }
 
     autoOpenModal = () => {
@@ -36,7 +36,7 @@ class LedgerModal extends React.Component {
     tryConnect = (timeout=undefined) => {
         if (this.state.loading) return
         this.setState({ loading: true, errorMessage: '' })
-        this.ledger.getCosmosAddress(timeout).then((res) => {
+        this.keplr.getCosmosAddress(timeout).then((res) => {
             let currentUser = localStorage.getItem(CURRENTUSERADDR);
             if (this.props.handleLoginConfirmed && res.address === currentUser) {
                 this.closeModal(true)
@@ -44,7 +44,7 @@ class LedgerModal extends React.Component {
                 this.setState({
                     currentUser: currentUser,
                     address: res.address,
-                    pubKey: Buffer.from(res.pubKey).toString('base64'),
+                    pubKey: res.pubKey,
                     errorMessage: '',
                     loading: false,
                     activeTab: '2'});
@@ -61,17 +61,18 @@ class LedgerModal extends React.Component {
 
     trySignIn = () => {
         this.setState({ loading: true, errorMessage: '' })
-        this.ledger.confirmLedgerAddress().then((res) => {
-            localStorage.setItem(CURRENTUSERADDR, this.state.address);
-            localStorage.setItem(CURRENTUSERPUBKEY, this.state.pubKey);
-            localStorage.setItem(CURRENTUSERWALLET, "ledger");
-            this.props.refreshApp();
-            this.closeModal(true);
+        //this.keplr.confirmLedgerAddress().then((res) => {
+        localStorage.setItem(CURRENTUSERADDR, this.state.address);
+        localStorage.setItem(CURRENTUSERPUBKEY, this.state.pubKey);
+        localStorage.setItem(CURRENTUSERWALLET, "keplr");
+        this.props.refreshApp();
+        this.closeModal(true);
+            /*
         }, (err) => {
             this.setState({
                 errorMessage: err.message,
                 loading: false
-            })})
+            })})*/
     }
 
     getActionButton() {
@@ -98,15 +99,15 @@ class LedgerModal extends React.Component {
     render() {
         return (
             <Modal isOpen={this.props.isOpen} toggle={this.closeModal} className="ledger-sign-in">
-                <ModalHeader><T>accounts.signInWithLedger</T></ModalHeader>
+                <ModalHeader><T>keplr.signInWithLedger</T></ModalHeader>
                 <ModalBody>
                     <TabContent activeTab={this.state.activeTab}>
                         <TabPane tabId="1">
-                            <T _purify={false}>accounts.signInWarning</T>
+                            <T _purify={false} network={Meteor.settings.public.chainId} version={(Meteor.settings.public.keplr?.appVersion || "0.8.10")}>keplr.signInWarning</T>
                         </TabPane>
                         <TabPane tabId="2">
                             {this.state.currentUser?<span>You are currently logged in as <strong className="text-primary d-block">{this.state.currentUser}.</strong></span>:null}
-                            <T>accounts.toLoginAs</T> <strong className="text-primary d-block">{this.state.address}</strong><T>accounts.pleaseAccept</T>
+                            <T>accounts.toLoginAs</T> <strong className="text-primary d-block">{this.state.address}</strong><T>keplr.pleaseAccept</T>
                         </TabPane>
                     </TabContent>
                     {this.state.loading?<Spinner type="grow" color="primary" />:''}
@@ -121,4 +122,4 @@ class LedgerModal extends React.Component {
     }
 }
 
-export default LedgerModal;
+export default KeplrModal;

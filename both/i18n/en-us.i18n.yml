@@ -6,6 +6,7 @@ common:
     voter: 'Voter'
     votingPower: 'Voting Power'
     addresses: 'Addresses'
+    address: 'Address'
     amounts: 'Amounts'
     delegators: 'delegators'
     block: 'block'
@@ -204,6 +205,12 @@ accounts:
     signInWarning: 'Please make sure your Ledger device is connected and <strong class="text-primary">Cosmos App 1.5.0 or above</strong> is opened.'
     pleaseAccept: 'please accept in your Ledger device.'
     noRewards: 'No Rewards'
+
+keplr:
+    signInWithLedger: 'Sign In With Keplr'
+    signInWarning: 'Please make sure your Keplr extension is unlocked.'
+    pleaseAccept: 'please accept in the Keplr popup.'
+    
 activities:
     single: 'A'
     happened: 'happened.'

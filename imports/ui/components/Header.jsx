@@ -20,12 +20,14 @@ import {
     PopoverBody,
     DropdownToggle,
     DropdownMenu,
-    DropdownItem
+    DropdownItem,
+    NavbarText
 } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import SearchBar from './SearchBar.jsx';
 import i18n from 'meteor/universe:i18n';
 import LedgerModal from '../ledger/LedgerModal.jsx';
+import KeplrModal from '../keplr/KeplrModal.jsx';
 import Account from './Account.jsx';
 
 const T = i18n.createComponent();
@@ -65,6 +67,12 @@ export default class Header extends Component {
     toggleSignIn = (value) => {
         this.setState(( prevState) => {
             return {isSignInOpen: value!=undefined?value:!prevState.isSignInOpen}
+        })
+    }
+
+    toggleSignInKeplr = (value) => {
+        this.setState((prevState) => {
+            return { isSignInKeplrOpen: value != undefined ? value : !prevState.isSignInKeplrOpen }
         })
     }
 
@@ -116,6 +124,8 @@ export default class Header extends Component {
     signOut = () => {
         localStorage.removeItem(CURRENTUSERADDR);
         localStorage.removeItem(CURRENTUSERPUBKEY);
+        //localStorage.removeItem(CURRENTUSERWALLET);
+        localStorage.setItem(CURRENTUSERWALLET, "");
         this.props.refreshApp();
     }
 
@@ -194,6 +204,52 @@ export default class Header extends Component {
                         <NavItem>
                             <NavLink tag={Link} to="/voting-power-distribution"><T>navbar.votingPower</T></NavLink>
                         </NavItem>
+
+                        {!signedInAddress ?
+                        <NavItem>
+                            <UncontrolledDropdown inNavbar>
+                                <DropdownToggle nav caret>
+                                    Connect Wallet
+                                </DropdownToggle>
+                                    <DropdownMenu right>
+                                        <DropdownItem onClick={() => { this.setState({ isSignInKeplrOpen: true }) }}>
+                                        Keplr
+                                        </DropdownItem>
+                                        <DropdownItem onClick={() => { this.setState({ isSignInOpen: true }) }}>
+                                        Ledger
+                                        </DropdownItem>
+                                        <KeplrModal isOpen={this.state.isSignInKeplrOpen} toggle={this.toggleSignInKeplr} refreshApp={this.props.refreshApp} handleLoginConfirmed={this.shouldLogin() ? this.handleLoginConfirmed : null} />
+                                        <LedgerModal isOpen={this.state.isSignInOpen} toggle={this.toggleSignIn} refreshApp={this.props.refreshApp} handleLoginConfirmed={this.shouldLogin() ? this.handleLoginConfirmed : null} />
+                                    </DropdownMenu>
+                            </UncontrolledDropdown>
+                        </NavItem>
+                        :
+                        <NavItem id="user-acconut-icon">
+                            <span>
+                                <span className="d-lg-none">
+                                    <i className="material-icons large d-inline">account_circle</i>
+                                    <Link to={`/account/${signedInAddress}`}> {signedInAddress}</Link>
+                                    <Button className="float-right" color="link" size="sm" onClick={this.signOut.bind(this)}><i className="material-icons">exit_to_app</i></Button>
+                                </span>
+                                <span className="d-none d-lg-block">
+                                    <i className="material-icons large">account_circle</i>
+                                    <UncontrolledPopover className="d-none d-lg-block" trigger="legacy" placement="bottom" target="user-acconut-icon">
+                                        <PopoverBody>
+                                            <div className="text-center">
+                                                <p><T>accounts.signInText</T></p>
+                                                <p><Link className="text-nowrap" to={`/account/${signedInAddress}`}>{signedInAddress}</Link></p>
+                                                <Button className="float-right" color="link" onClick={this.signOut.bind(this)}><i className="material-icons">exit_to_app</i><span> <T>accounts.signOut</T></span></Button>
+                                            </div>
+                                        </PopoverBody>
+                                    </UncontrolledPopover>
+                                </span>
+                            </span>
+                            <KeplrModal isOpen={this.state.isSignInKeplrOpen} toggle={this.toggleSignIn} refreshApp={this.props.refreshApp} handleLoginConfirmed={this.shouldLogin() ? this.handleLoginConfirmed : null} />
+                            <LedgerModal isOpen={this.state.isSignInOpen} toggle={this.toggleSignIn} refreshApp={this.props.refreshApp} handleLoginConfirmed={this.shouldLogin() ? this.handleLoginConfirmed : null} />
+                        </NavItem>
+                        } 
+
+                        {/*
                         <NavItem id="user-acconut-icon">
                             {!signedInAddress?<Button className="sign-in-btn" color="link" size="lg" onClick={() => {this.setState({isSignInOpen: true})}}><i className="material-icons">vpn_key</i></Button>:
                                 <span>
@@ -217,6 +273,8 @@ export default class Header extends Component {
                                 </span>}
                             <LedgerModal isOpen={this.state.isSignInOpen} toggle={this.toggleSignIn} refreshApp={this.props.refreshApp} handleLoginConfirmed={this.shouldLogin()?this.handleLoginConfirmed:null}/>
                         </NavItem>
+                        */}
+                        <NavbarText>&nbsp;</NavbarText>
                         <NavItem>
                             <UncontrolledDropdown inNavbar>
                                 <DropdownToggle nav caret>

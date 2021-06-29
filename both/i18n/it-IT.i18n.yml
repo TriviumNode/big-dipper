@@ -6,6 +6,7 @@ common:
     voter: 'Votante'
     votingPower: 'Potere di voto'
     addresses: 'Indirizzi'
+    address: 'Indirizzi'
     amounts: 'Importi'
     delegators: 'delegatori'
     block: 'blocco'

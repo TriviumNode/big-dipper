@@ -15,6 +15,7 @@ import { Meteor } from 'meteor/meteor';
 import Coin from '/both/utils/coins.js';
 import TimeStamp from '../components/TimeStamp.jsx';
 import { ProposalActionButtons } from '../ledger/LedgerActions.jsx';
+import { KeplrProposalActionButtons } from '../keplr/KeplrActions.jsx';
 
 const T = i18n.createComponent();
 
@@ -40,7 +41,8 @@ export default class Proposal extends Component{
             noWithVetoPercent: 0,
             proposalValid: false,
             orderDir: -1,
-            breakDownSelection: 'Bar'
+            breakDownSelection: 'Bar',
+            wallet: ''
         }
 
         if (Meteor.isServer){
@@ -59,6 +61,7 @@ export default class Proposal extends Component{
         if (this.props.proposal != prevProps.proposal){
             // console.log(this.props.proposal.value);
             this.setState({
+                wallet: localStorage.getItem(CURRENTUSERWALLET),
                 proposal: this.props.proposal,
                 deposit: <div>{this.props.proposal.total_deposit?this.props.proposal.total_deposit.map((deposit, i) => {
                     return <div key={i}>{new Coin(deposit.amount, deposit.denom).toString()}</div>
@@ -282,7 +285,15 @@ export default class Proposal extends Component{
                         <Row className="mb-2 border-top">
                             <Col md={3} className="label"><T>proposals.proposalID</T></Col>
                             <Col md={this.state.user?6:9} className="value">{this.props.proposal.proposalId}</Col>
-                            {this.state.user?<Col md={3}><ProposalActionButtons history={this.props.history} proposalId={proposalId}/></Col>:null}
+                            {this.state.user?
+                                <Col md={3}>
+                                    {this.state.wallet.includes("ledger")?
+                                        <ProposalActionButtons history={this.props.history} proposalId={proposalId}/>
+                                    :
+                                        <KeplrProposalActionButtons history={this.props.history} proposalId={proposalId}/>
+                                    }
+                                </Col>
+                            :null}
                         </Row>
                         <Row className="mb-2 border-top">
                             <Col md={3} className="label"><T>proposals.proposer</T></Col>
