@@ -375,41 +375,6 @@ class KeplrButton extends Component {
         })
     }
 
-    getUSDPrice = (collateralDenom) =>{
-        // Skip BNB coin
-        let market;
-        if(collateralDenom.length > 3){
-            if ((collateralDenom.endsWith('B') || collateralDenom.endsWith('b'))){
-                market = collateralDenom.substring(0, collateralDenom.length - 1)?.toLowerCase()
-            }
-            else if ((collateralDenom.startsWith('U') || collateralDenom.startsWith('u'))){
-                market = collateralDenom.substring(1)?.toLowerCase()
-            }
-            else{
-                market = collateralDenom?.toLowerCase();
-            }
-        }
-        else {
-            market = collateralDenom?.toLowerCase();
-        }
-        Meteor.call('cdp.getCDPPrice', `${market}:usd`, (error, result) => {
-            if (error) {
-                // console.warn(error);
-                this.setState({
-                    loading: true,
-                    price: 0
-                })
-            }
-
-            if (result) {
-                this.setState({
-                    price: result,
-                    loading: false
-                })
-            }
-        });
-    }
-
     tryConnect = () => {
         this.keplr.getCosmosAddress().then((res) => {
             if (res.address == this.state.user)
@@ -516,46 +481,6 @@ class KeplrButton extends Component {
         }
     }
 
-    /*
-    runSimulatation = (txMsg, simulateBody) => {
-        let gasAdjustment = TypeMeta[this.state.actionType].gasAdjustment || DEFAULT_GAS_ADJUSTMENT;
-        Meteor.call('transaction.simulateKeplr', simulateBody, this.state.user, this.state.currentUser.accountNumber, this.state.currentUser.sequence, this.getPath(), gasAdjustment, (err, res) => {
-            if (res) {
-                if (res === '0') {
-                    res = '300000'
-                }
-                Keplr.applyGas(txMsg, res, Meteor.settings.public.gasPrice, Coin.StakingCoin.denom);
-                this.setStateOnSuccess('simulating', {
-                    gasEstimate: res,
-                    activeTab: '3',
-                    txMsg: txMsg
-                })
-            }
-            else {
-                console.log(err)
-                this.setStateOnError('simulating', 'something went wrong')
-            }
-        })
-        /*
-        Meteor.call('transaction.simulateKeplr', simulateBody, this.state.user, this.state.currentUser.accountNumber, this.state.currentUser.sequence, this.getPath(), gasAdjustment, (err, res) => {
-            if (res) {
-                if (res === '0') {
-                    res = '300000'
-                }
-                Keplr.applyGas(txMsg, res, Meteor.settings.public.gasPrice, Coin.StakingCoin.denom);
-                this.setStateOnSuccess('simulating', {
-                    gasEstimate: res,
-                    activeTab: '3',
-                    txMsg: txMsg
-                })
-            }
-            else {
-                console.log(err)
-                this.setStateOnError('simulating', 'something went wrong')
-            }
-        })
-    }
-*/
     runSimulatation = (txMsg, simulateBody) => {
         let gasAdjustment = TypeMeta[this.state.actionType].gasAdjustment || DEFAULT_GAS_ADJUSTMENT;
         Meteor.call('transaction.simulate', simulateBody, this.state.user, this.getPath(), gasAdjustment, (err, res) =>{

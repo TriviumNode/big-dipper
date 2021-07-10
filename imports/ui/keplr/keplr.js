@@ -37,14 +37,6 @@ export const toPubKey = (address) => {
     return bech32.decode(Meteor.settings.public.bech32PrefixAccAddr, address);
 }
 
-function createCosmosAddress(publicKey) {
-    const message = CryptoJS.enc.Hex.parse(publicKey.toString(`hex`))
-    const hash = ripemd160(sha256(message)).toString()
-    const address = Buffer.from(hash, `hex`)
-    const cosmosAddress = bech32ify(address, Meteor.settings.public.bech32PrefixAccAddr)
-    return cosmosAddress
-}
-
 export class Keplr {
     constructor({ testModeAllowed }) {
         this.testModeAllowed = testModeAllowed
@@ -95,8 +87,8 @@ export class Keplr {
         //check version and connect
         await this.isReady()
 
-        const offlineSigner = window.getOfflineSigner(Meteor.settings.public.chainId);
-        const enigmaUtils = window.getEnigmaUtils(Meteor.settings.public.chainId);
+        const offlineSigner = window.keplr.getOfflineSigner(Meteor.settings.public.chainId);
+        const enigmaUtils = window.keplr.getEnigmaUtils(Meteor.settings.public.chainId);
         const accounts = await offlineSigner.getAccounts();
 
         const secretJS = new SigningCosmWasmClient(
@@ -167,47 +159,6 @@ export class Keplr {
         return JSON.stringify(canonicalizeJson(txFieldsToSign));
     }
 
-    
-    /* istanbul ignore next: maps a bunch of errors */
-    checkLedgerErrors(
-        { error_message, device_locked },
-        {
-            timeoutMessag = "Connection timed out. Please try again.",
-            rejectionMessage = "User rejected the transaction"
-        } = {}
-    ) {
-        if (device_locked) {
-            throw new Error(`Ledger's screensaver mode is on`)
-        }
-        switch (error_message) {
-        case `U2F: Timeout`:
-            throw new Error(timeoutMessag)
-        case `Cosmos app does not seem to be open`:
-            // hack:
-            // It seems that when switching app in Ledger, WebUSB will disconnect, disabling further action.
-            // So we clean up here, and re-initialize this.cosmosApp next time when calling `connect`
-            this.cosmosApp.transport.close()
-            this.cosmosApp = undefined
-            throw new Error(`Cosmos app is not open`)
-        case `Command not allowed`:
-            throw new Error(`Transaction rejected`)
-        case `Transaction rejected`:
-            throw new Error(rejectionMessage)
-        case `Unknown error code`:
-            throw new Error(`Ledger's screensaver mode is on`)
-        case `Instruction not supported`:
-            throw new Error(
-                `Your Cosmos Ledger App is not up to date. ` +
-                    `Please update to version ${REQUIRED_KEPLR_APP_VERSION}.`
-            )
-        case `No errors`:
-            // do nothing
-            break
-        default:
-            throw new Error(error_message)
-        }
-    }
-
 
     static applyGas(unsignedTx, gas, gasPrice = DEFAULT_GAS_PRICE, denom = DEFAULT_DENOM) {
         if (typeof unsignedTx === 'undefined') {
@@ -226,39 +177,6 @@ export class Keplr {
             gas: gas.toString(),
         };
         return unsignedTx;
-    }
-
-    static applySignature(unsignedTx, txContext, secp256k1Sig) {
-        if (typeof unsignedTx === 'undefined') {
-            throw new Error('undefined unsignedTx');
-        }
-        if (typeof txContext === 'undefined') {
-            throw new Error('undefined txContext');
-        }
-        if (typeof txContext.pk === 'undefined') {
-            throw new Error('txContext does not contain the public key (pk)');
-        }
-        if (typeof txContext.accountNumber === 'undefined') {
-            throw new Error('txContext does not contain the accountNumber');
-        }
-        if (typeof txContext.sequence === 'undefined') {
-            throw new Error('txContext does not contain the sequence value');
-        }
-
-        const tmpCopy = Object.assign({}, unsignedTx, {});
-
-        tmpCopy.value.signatures = [
-            {
-                signature: secp256k1Sig.toString('base64'),
-                account_number: txContext.accountNumber.toString(),
-                sequence: txContext.sequence.toString(),
-                pub_key: {
-                    type: 'tendermint/PubKeySecp256k1',
-                    value: txContext.pk//Buffer.from(txContext.pk, 'hex').toString('base64'),
-                },
-            },
-        ];
-        return tmpCopy;
     }
 }
 
