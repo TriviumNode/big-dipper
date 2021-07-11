@@ -1,14 +1,14 @@
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
 import { Transactions } from '/imports/api/transactions/transactions.js';
-import ValidatorTransactions from './Transactions.jsx';
+import ValidatorTransactions from '../components/Transactions.jsx';
 
-export default TransactionsContainer = withTracker((props) => {
+export default AccountTransactions = withTracker((props) => {
     let transactionsHandle, transactions, transactionsExist;
     let loading = true;
 
     if (Meteor.isClient){
-        transactionsHandle = Meteor.subscribe('transactions.validator', props.validator, props.delegator, props.limit);
+        transactionsHandle = Meteor.subscribe('contracts.transactions', props.address, props.limit);
         loading = !transactionsHandle.ready();
     }
 

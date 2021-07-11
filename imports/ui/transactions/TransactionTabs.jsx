@@ -11,8 +11,9 @@ export default class TransactionTabs extends Component{
     constructor(props){
         super(props);
         this.state ={
-            activeTab: 'tx-transfer',
+            activeTab: this.props.activeTab || 'tx-transfer',
             transferTxs: {},
+            contractTxs: {},
             stakingTxs: {},
             distributionTxs: {},
             governanceTxs: {},
@@ -32,6 +33,7 @@ export default class TransactionTabs extends Component{
         if (this.props != prevProps){
             this.setState({
                 transferTxs: this.props.transferTxs,
+                contractTxs: this.props.contractTxs,
                 stakingTxs: this.props.stakingTxs,
                 distributionTxs: this.props.distributionTxs,
                 governanceTxs: this.props.governanceTxs,
@@ -51,6 +53,14 @@ export default class TransactionTabs extends Component{
                             onClick={() => { this.toggle('tx-transfer'); }}
                         >
                             <T>transactions.transfer</T> ({numbro(this.state.transferTxs.length).format("0,0")})
+                        </NavLink>
+                    </NavItem>
+                    <NavItem>
+                        <NavLink
+                            className={classnames({ active: this.state.activeTab === 'tx-contract' })}
+                            onClick={() => { this.toggle('tx-contract'); }}
+                        >
+                            <T>contracts.contract</T> ({numbro(this.state.contractTxs.length).format("0,0")})
                         </NavLink>
                     </NavItem>
                     <NavItem>
@@ -91,6 +101,20 @@ export default class TransactionTabs extends Component{
                         <Row>
                             <Col>
                                 {(this.state.transferTxs.length > 0)?this.state.transferTxs.map((tx, i) => {
+                                    return <TransactionRow 
+                                        key={i} 
+                                        index={i} 
+                                        tx={tx}
+                                        blockList 
+                                    />
+                                }):''}
+                            </Col>
+                        </Row>
+                    </TabPane>
+                    <TabPane tabId="tx-contract">
+                        <Row>
+                            <Col>
+                                {(this.state.contractTxs.length > 0)?this.state.contractTxs.map((tx, i) => {
                                     return <TransactionRow 
                                         key={i} 
                                         index={i} 

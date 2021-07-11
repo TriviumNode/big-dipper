@@ -31,7 +31,8 @@
             "supply": true,
             "minting": false,
             "gov": true,
-            "distribution": false
+            "distribution": false,
+            "cosmwasm": false
         },
         "gasPrice": 0.02,
         "coingeckoId": "cosmos"
@@ -55,7 +56,9 @@
         "signingInfoInterval": 1800000,
         "proposalInterval": 5000,
         "missedBlocksInterval": 60000,
-        "delegationInterval": 900000
+        "delegationInterval": 900000,
+        "contractsInterval": 30000,
+        "testInterval": 120000
     }
 }
 

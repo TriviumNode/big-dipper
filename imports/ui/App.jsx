@@ -18,6 +18,7 @@ import SearchBar from '/imports/ui/components/SearchBar.jsx';
 import moment from 'moment';
 import SentryBoundary from '/imports/ui/components/SentryBoundary.jsx';
 import NotFound from '/imports/ui/pages/NotFound.jsx';
+import Contracts from '/imports/ui/contracts/ContractsList.jsx';
 
 import { ToastContainer, toast } from 'react-toastify';
 
@@ -89,7 +90,8 @@ class App extends Component {
                             <Route path="/validators" exact component={Validators} />
                             <Route path="/validators/inactive" render={(props) => <Validators {...props} inactive={true} />} />
                             <Route path="/voting-power-distribution" component={Distribution} />
-                            <Route path="/(validator|validators)" component={ValidatorDetails} />
+                            <Route path="/(validator|validators|node|nodes)" component={ValidatorDetails} />
+                            {Meteor.settings.public.modules.cosmwasm?<Route path="/contracts" component={Contracts} />:null}
                             {Meteor.settings.public.modules.gov?<Route path="/proposals" component={Proposals} />:null}
                             <Route component={NotFound} />
                         </Switch>

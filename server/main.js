@@ -7,12 +7,15 @@ import '/imports/startup/both';
 
 SYNCING = false;
 TXSYNCING = false;
+CTSYNCING = false;
 COUNTMISSEDBLOCKS = false;
 COUNTMISSEDBLOCKSSTATS = false;
 RPC = Meteor.settings.remote.rpc;
 LCD = Meteor.settings.remote.lcd;
 timerBlocks = 0;
 timerTransactions = 0;
+timerContracts = 0;
+timerTest = 0;
 timerChain = 0;
 timerConsensus = 0;
 timerProposal = 0;
@@ -52,6 +55,39 @@ updateTransactions = () => {
         }
         else{
             console.log("updateTransactions: "+result);
+        }
+    })
+}
+
+updateContracts = () => {
+    Meteor.call('Contracts.updateContracts', (error, result) => {
+        if (error) {
+            console.log("updateContracts: " + error);
+        }
+        else {
+            console.log("updateContracts: " + result);
+        }
+    })
+}
+
+showContracts = () => {
+    Meteor.call('Contracts.showContracts', (error, result) => {
+        if (error) {
+            console.log("showContracts: " + error);
+        }
+        else {
+            console.log("showContracts: " + result);
+        }
+    })
+}
+
+test1 = () => {
+    Meteor.call('Contracts.executions', "secret1k0jntykt7e4g3y88ltc60czgjuqdy4c9e8fzek", (error, result) => {
+        if (error) {
+            console.log("sSCRT Executions Error: " + error);
+        }
+        else {
+            console.log("sSCRT Executions: " + result);
         }
     })
 }
@@ -194,6 +230,17 @@ Meteor.startup(function(){
         timerTransactions = Meteor.setInterval(function(){
             updateTransactions();
         }, Meteor.settings.params.transactionsInterval);
+
+        if (Meteor.settings.public.modules.cosmwasm){
+            timerContracts = Meteor.setInterval(function () {
+                updateContracts();
+                showContracts();
+            }, Meteor.settings.params.contractsInterval);
+        }
+
+        timerTest = Meteor.setInterval(function () {
+            test1();
+        }, Meteor.settings.params.testInterval);
 
         timerChain = Meteor.setInterval(function(){
             updateChainStatus();

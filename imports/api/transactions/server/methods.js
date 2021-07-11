@@ -23,6 +23,7 @@ Meteor.methods({
             
                     tx.height = parseInt(tx.height);
                     tx.processed = true;
+                    tx.contractProcessed = false;
 
                     bulkTransactions.find({txhash:transactions[i].txhash}).updateOne({$set:tx});
 

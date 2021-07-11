@@ -198,9 +198,16 @@ export default class Header extends Component {
                         <NavItem>
                             <NavLink tag={Link} to="/transactions"><T>navbar.transactions</T></NavLink>
                         </NavItem>
-                        <NavItem>
-                            <NavLink tag={Link} to="/proposals"><T>navbar.proposals</T></NavLink>
-                        </NavItem>
+                        {Meteor.settings.public.modules.cosmwasm?
+                            <NavItem>
+                                <NavLink tag={Link} to="/contracts"><T>contracts.contracts</T></NavLink>
+                            </NavItem>
+                        : null }
+                        {Meteor.settings.public.modules.gov?
+                            <NavItem>
+                                <NavLink tag={Link} to="/proposals"><T>navbar.proposals</T></NavLink>
+                            </NavItem>
+                        : null }
                         <NavItem>
                             <NavLink tag={Link} to="/voting-power-distribution"><T>navbar.votingPower</T></NavLink>
                         </NavItem>

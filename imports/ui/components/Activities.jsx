@@ -2,6 +2,7 @@ import React, {Component } from 'react';
 import { MsgType } from './MsgType.jsx';
 import { Link } from 'react-router-dom';
 import Account from '../components/Account.jsx';
+import Contract from '../components/Contract.jsx';
 import i18n from 'meteor/universe:i18n';
 import Coin from '/both/utils/coins.js'
 import ReactJson from 'react-json-view'
@@ -45,7 +46,7 @@ export default class Activites extends Component {
         for (let i in this.props.events){
             events[this.props.events[i].type] = this.props.events[i].attributes
         }
-        
+        try {
         switch (msg.type){
         // bank
         case "cosmos-sdk/MsgSend":
@@ -84,7 +85,7 @@ export default class Activites extends Component {
             return <p><Account address={msg.value.delegator_address}/> {(this.props.invalid)?<T>activities.failedTo</T>:''}<MsgType type={msg.type} /> {(!this.props.invalid)?<T _purify={false} amount={new Coin(parseInt(events['withdraw_rewards'][0].value), events['withdraw_rewards'][0].value.replace(/[0-9]/g, '')).toString(6)}>activities.withAmount</T>:''} <T>activities.from</T> <Account address={msg.value.validator_address} /><T>common.fullStop</T></p>
         case "cosmos-sdk/MsgModifyWithdrawAddress":
             return <p><Account address={msg.value.delegator_address}/> {(this.props.invalid)?<T>activities.failedTo</T>:''}<MsgType type={msg.type} /></p>
-
+        
             // slashing
         case "cosmos-sdk/MsgUnjail":
             return <p><Account address={msg.value.address}/> {(this.props.invalid)?<T>activities.failedTo</T>:''}<MsgType type={msg.type} /><T>common.fullStop</T></p>
@@ -95,8 +96,13 @@ export default class Activites extends Component {
         case "cosmos-sdk/IBCReceiveMsg":
             return <MsgType type={msg.type} />
 
+            // cosmwasm
+        case "wasm/MsgExecuteContract":
+            return <p><Account address={msg.value.sender} /> {(this.props.invalid) ? <T>activities.execute</T> : ''}<MsgType type={msg.type} /> <T>contracts.contractlc</T> <Account address={msg.value.contract} /><T>common.fullStop</T></p>
+
         default:
             return <div><ReactJson src={msg.value} /></div>
         }
+    } catch { console.log(events)}
     }
 }
