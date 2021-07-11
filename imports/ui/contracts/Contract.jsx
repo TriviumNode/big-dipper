@@ -11,6 +11,7 @@ import { Helmet } from 'react-helmet';
 import i18n from 'meteor/universe:i18n';
 import Coin from '/both/utils/coins.js';
 import TimeStamp from '../components/TimeStamp.jsx';
+import Account from '../components/Account.jsx';
 
 const T = i18n.createComponent();
 export default class Contract extends Component {
@@ -56,9 +57,7 @@ export default class Contract extends Component {
                                 <Col md={4} className="label"><T>contracts.label</T></Col>
                                 <Col md={8} className="value text-nowrap overflow-auto address">{tx.label}</Col>
                                 <Col md={4} className="label"><T>contracts.creator</T></Col>
-                                <Col md={8} className="value">
-                                    <Link to={"/address/" + tx.creator}>{tx.creator}</Link>
-                                </Col>
+                                <Col md={8} className="value"><Account address={tx.creator}/></Col>
                                 <Col md={4} className="label"><T>contracts.codeId</T></Col>
                                 <Col md={8} className="value text-nowrap overflow-auto address">{tx.code_id}</Col>
                                 {/*

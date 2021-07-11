@@ -24,7 +24,18 @@ export default class SearchBar extends Component {
                 this.props.history.push('/validator/'+query);
             }
             else if (query.match(accountRegEx)){
-                this.props.history.push('/account/'+query);
+                Meteor.call('Contracts.findOne', query, (error, result) => {
+                    if (error) {
+                        console.log(error);
+                    }
+                    if (result) {
+                        this.props.history.push('/contracts/'+query);
+                    }
+                    else {
+                        this.props.history.push('/account/'+query);
+                    }
+                })
+                
             }
             else{
                 // handle not found
