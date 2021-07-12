@@ -186,14 +186,14 @@ Meteor.methods({
         this.unblock();
         if (SYNCING)
             return "Syncing...";
-        else console.log("start to sync");
+        //else console.log("start to sync");
         // Meteor.clearInterval(Meteor.timerHandle);
         // get the latest height
         let until = Meteor.call('blocks.getLatestHeight');
         // console.log(until);
         // get the current height in db
         let curr = Meteor.call('blocks.getCurrentHeight');
-        console.log(curr);
+        //console.log(curr);
         // loop if there's update in db
         if (until > curr) {
             SYNCING = true;
@@ -250,7 +250,7 @@ Meteor.methods({
                 const bulkVPHistory = VotingPowerHistory.rawCollection().initializeUnorderedBulkOp();
                 const bulkTransactions = Transactions.rawCollection().initializeUnorderedBulkOp();
 
-                console.log(url);
+                //console.log(url);
                 try{
                     let startGetHeightTime = new Date();
                     let response = HTTP.get(url);
@@ -331,7 +331,7 @@ Meteor.methods({
                             do {
                                 url = RPC+`/validators?height=${height}&page=${++page}&per_page=100`;
                                 response = HTTP.get(url);
-                                console.log(url);
+                                //console.log(url);
                                 result = JSON.parse(response.content);
                                 validators = [...validators, ...result.result.validators];
                             }
@@ -577,13 +577,13 @@ Meteor.methods({
                         }
 
                         let endFindValidatorsNameTime = new Date();
-                        console.log("Get validators name time: "+((endFindValidatorsNameTime-startFindValidatorsNameTime)/1000)+"seconds.");
+                        //console.log("Get validators name time: "+((endFindValidatorsNameTime-startFindValidatorsNameTime)/1000)+"seconds.");
 
                         // record for analytics
                         let startAnayticsInsertTime = new Date();
                         Analytics.insert(analyticsData);
                         let endAnalyticsInsertTime = new Date();
-                        console.log("Analytics insert time: "+((endAnalyticsInsertTime-startAnayticsInsertTime)/1000)+"seconds.");
+                        //console.log("Analytics insert time: "+((endAnalyticsInsertTime-startAnayticsInsertTime)/1000)+"seconds.");
 
                         let startVUpTime = new Date();
                         if (bulkValidators.length > 0){
@@ -606,7 +606,7 @@ Meteor.methods({
                         }
 
                         let endVUpTime = new Date();
-                        console.log("Validator update time: "+((endVUpTime-startVUpTime)/1000)+"seconds.");
+                        //console.log("Validator update time: "+((endVUpTime-startVUpTime)/1000)+"seconds.");
 
                         let startVRTime = new Date();
                         if (bulkValidatorRecords.length > 0){
@@ -618,7 +618,7 @@ Meteor.methods({
                         }
 
                         let endVRTime = new Date();
-                        console.log("Validator records update time: "+((endVRTime-startVRTime)/1000)+"seconds.");
+                        //console.log("Validator records update time: "+((endVRTime-startVRTime)/1000)+"seconds.");
 
                         if (bulkVPHistory.length > 0){
                             bulkVPHistory.execute((err) => {

@@ -12,6 +12,7 @@ import i18n from 'meteor/universe:i18n';
 import Coin from '/both/utils/coins.js';
 import TimeStamp from '../components/TimeStamp.jsx';
 import Account from '../components/Account.jsx';
+import { coinConvert } from '@stakeordie/griptape.js'
 
 const T = i18n.createComponent();
 export default class Contract extends Component {
@@ -33,6 +34,7 @@ export default class Contract extends Component {
         else {
             if (this.props.contractExist) {
                 let tx = this.props.contract;
+                console.log(tx);
                 return <Container id="transaction">
                     <Helmet>
                         <title>Contract {tx.label} on Cosmos Hub | The Big Dipper</title>
@@ -69,8 +71,59 @@ export default class Contract extends Component {
                                 */}
 
                             </Row>
+
+
                         </CardBody>
                     </Card>
+                    {tx.token_info?
+                    <Card>
+                        <div className="card-header"><T>common.snip20info</T></div>
+                        <CardBody>
+                            <Row>
+                                <Col md={4} className="label"><T>common.name</T></Col>
+                                <Col md={8} className="value text-nowrap overflow-auto address">{tx.token_info.name}</Col>
+                                <Col md={4} className="label"><T>common.symbol</T></Col>
+                                <Col md={8} className="value text-nowrap overflow-auto address">{tx.token_info.symbol}</Col>
+                                <Col md={4} className="label"><T>common.decimals</T></Col>
+                                <Col md={8} className="value text-nowrap overflow-auto address">{tx.token_info.decimals}</Col>
+                                <Col md={4} className="label"><T>common.total_supply</T></Col>
+                                <Col md={8} className="value text-nowrap overflow-auto address">{coinConvert(tx.token_info.total_supply, tx.token_info.decimals, 'human', 4)}</Col>
+                            </Row>
+                        </CardBody>
+                    </Card>:null}
+                    {tx.bridge_info?
+                    <Card>
+                        <div className="card-header"><T>common.brodgeinfo</T></div>
+                        <CardBody>
+                            <Row>
+                                <Col md={4} className="label"><T>common.name</T></Col>
+                                <Col md={8} className="value text-nowrap overflow-auto address">{tx.bridge_info.name}</Col>
+                                <Col md={4} className="label"><T>common.symbol</T></Col>
+                                <Col md={8} className="value text-nowrap overflow-auto address">{tx.bridge_info.symbol}</Col>
+                                <Col md={4} className="label"><T>common.source</T></Col>
+                                <Col md={8} className="value text-nowrap overflow-auto address">{tx.bridge_info.src_network}</Col>
+                                <Col md={4} className="label"><T>common.sourceaddr</T></Col>
+                                <Col md={8} className="value text-nowrap overflow-auto address">{tx.bridge_info.src_address}</Col>
+                            </Row>
+                        </CardBody>
+                    </Card>:null}
+                    {tx.sswap_info?
+                    <Card>
+                        <div className="card-header"><T>common.swapinfo</T></div>
+                        <CardBody>
+                            <Row>
+                                <Col md={4} className="label"><T>common.name</T></Col>
+                                <Col md={8} className="value text-nowrap overflow-auto address">{tx.name}</Col>
+                                <Col md={4} className="label"><T>common.desc</T></Col>
+                                <Col md={8} className="value text-nowrap overflow-auto address">{tx.description}</Col>
+                                <Col md={4} className="label"><T>common.lptoken</T></Col>
+                                <Col md={8} className="value text-nowrap overflow-auto address">{tx.sswap_info.lp_token_addr}</Col>
+                                <Col md={4} className="label"><T>common.assets</T></Col>
+                                <Col md={8} className="value text-nowrap overflow-auto address">{tx.sswap_info.assets[0].address}<br/>{tx.sswap_info.assets[1].address}</Col>
+                            </Row>
+                        </CardBody>
+                    </Card>:null}
+
                     <AccountTransactions address={tx.address} limit={100} activeTab="tx-contract"/>
                 </Container>
             }

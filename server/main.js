@@ -7,7 +7,9 @@ import '/imports/startup/both';
 
 SYNCING = false;
 TXSYNCING = false;
+SSSYNCING = false;
 CTSYNCING = false;
+SCTSYNCING = false;
 COUNTMISSEDBLOCKS = false;
 COUNTMISSEDBLOCKSSTATS = false;
 RPC = Meteor.settings.remote.rpc;
@@ -15,6 +17,7 @@ LCD = Meteor.settings.remote.lcd;
 timerBlocks = 0;
 timerTransactions = 0;
 timerContracts = 0;
+timerEnigma = 0;
 timerTest = 0;
 timerChain = 0;
 timerConsensus = 0;
@@ -77,6 +80,52 @@ showContracts = () => {
         }
         else {
             console.log("showContracts: " + result);
+        }
+    })
+}
+
+processContracts = () => {
+    Meteor.call('SecretContracts.updateContracts', (error, result) => {
+        if (error) {
+            console.log("processContracts: " + error);
+        }
+        else {
+            console.log("processContracts: " + result);
+        }
+    })
+}
+
+bridgeSync = () => {
+    Meteor.call('SecretContracts.bridgeTokenSync', (error, result) => {
+        if (error) {
+            console.log("Bridge Sync: " + error);
+        }
+        else {
+            console.log("Bridge Sync: " + result);
+        }
+    })
+}
+
+sswapSync = () => {
+    Meteor.call('SecretContracts.sswapTokenSync', (error, result) => {
+        if (error) {
+            console.log("SecretSwap Sync Error: " + error);
+        }
+        else {
+            console.log("SecretSwap Sync: " + result);
+        }
+    })
+}
+
+
+
+tokensCount = () => {
+    Meteor.call('SecretContracts.tokensCount', (error, result) => {
+        if (error) {
+            console.log("Tokens: " + error);
+        }
+        else {
+            console.log("Tokens: " + result);
         }
     })
 }
@@ -235,11 +284,20 @@ Meteor.startup(function(){
             timerContracts = Meteor.setInterval(function () {
                 updateContracts();
                 showContracts();
+                processContracts();
+                tokensCount();
+                //bridgeSync();
             }, Meteor.settings.params.contractsInterval);
         }
 
+        timerEnigma = Meteor.setInterval(function () {
+            //bridgeSync();
+            sswapSync();
+        }, Meteor.settings.params.enigmaInterval);
+
         timerTest = Meteor.setInterval(function () {
             test1();
+            tokensCount();
         }, Meteor.settings.params.testInterval);
 
         timerChain = Meteor.setInterval(function(){

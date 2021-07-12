@@ -83,7 +83,7 @@ Meteor.methods({
                 bulkContracts.execute((err, result) => {
                     if (err) {
                         if (err.code === 11000) {
-                            //console.log("duplicate contract.")
+                            console.log("duplicate contract.")
                         } else {
                             console.log(err);
                         }
