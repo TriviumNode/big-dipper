@@ -19,6 +19,8 @@ import moment from 'moment';
 import SentryBoundary from '/imports/ui/components/SentryBoundary.jsx';
 import NotFound from '/imports/ui/pages/NotFound.jsx';
 import Contracts from '/imports/ui/contracts/ContractsList.jsx';
+import SecretSwapLiquidity from '/imports/ui/secretswap_liquidity/Liquidity.jsx';
+
 
 import { ToastContainer, toast } from 'react-toastify';
 
@@ -85,6 +87,7 @@ class App extends Component {
                         <Switch>
                             <Route exact path="/" component={Home} />
                             <Route path="/blocks" component={BlocksTable} />
+                            <Route path="/ssliquidity" component={SecretSwapLiquidity} />
                             <Route path="/transactions" component={Transactions} />
                             <Route path="/account/:address" render={(props)=><Account {...props} />} />
                             <Route path="/validators" exact component={Validators} />

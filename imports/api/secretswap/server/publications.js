@@ -1,5 +1,5 @@
 import { Meteor } from 'meteor/meteor';
-import { Contracts } from '../contracts.js';
+import { Contracts } from '../../contracts/contracts.js';
 import { Blockscon } from '../../blocks/blocks.js';
 import { Transactions } from '../../transactions/transactions.js';
 

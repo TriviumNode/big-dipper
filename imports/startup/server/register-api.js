@@ -36,3 +36,6 @@ import '../../api/contracts/server/methods.js';
 import '../../api/contracts/server/publications.js';
 
 import '../../api/secretcontracts/server/methods.js';
+
+import '../../api/secretswap/server/methods.js';
+import '../../api/secretswap/server/publications.js';

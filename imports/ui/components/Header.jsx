@@ -212,6 +212,10 @@ export default class Header extends Component {
                             <NavLink tag={Link} to="/voting-power-distribution"><T>navbar.votingPower</T></NavLink>
                         </NavItem>
 
+                        <NavItem>
+                            <NavLink tag={Link} to="/ssliquidity"><T>ssliquidity</T></NavLink>
+                        </NavItem>
+
                         {!signedInAddress ?
                         <NavItem>
                             <UncontrolledDropdown inNavbar>
