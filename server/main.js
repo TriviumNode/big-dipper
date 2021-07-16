@@ -291,7 +291,7 @@ Meteor.startup(function(){
         }
 
         timerEnigma = Meteor.setInterval(function () {
-            //bridgeSync();
+            bridgeSync();
             sswapSync();
         }, Meteor.settings.params.enigmaInterval);
 

@@ -52,14 +52,55 @@ Meteor.methods({
                     let tinfo = JSON.parse(response.content || response);
                     if (tinfo) {
                         if (tinfo.symbol?.includes("SPY")) {
-                            tinfo.token_info.decimals = 6;
+                            try {
+                                url1 = queryProxy + '?query=reward_token&contract=' + address;
+                                let response1 = HTTP.get(url1);
+                                let rwtoken = JSON.parse(response1.content || response1);
+
+                                url2 = queryProxy + '?query=incentivized_token&contract=' + address;
+                                let response2 = HTTP.get(url2);
+                                let ivtoken = JSON.parse(response2.content || response2);
+
+                                if (rwtoken.reward_token.token.address.includes("secret15l9cqgz5uezgydrglaak5ahfac69kmx2qpd6xt")) {
+                                    tinfo.token_info.decimals = 6;
+                                    bulkContracts.find({ address: contracts[i].address }).updateOne({ $set: {
+                                        advProcessed: true,
+                                        snip20: true,
+                                        incentivized_token: ivtoken.incentivized_token.token.address,
+                                        token_info:  tinfo.token_info
+                                    }});
+
+                                    bulkContracts.find({ address: ivtoken.incentivized_token.token.address }).updateOne({ $set: {
+                                        advProcessed: true,
+                                        snip20: true,
+                                        spy_token: contracts[i].address,
+                                        token_info:  tinfo.token_info
+                                    }});
+
+                                } else {
+                                    bulkContracts.find({ address: contracts[i].address }).updateOne({ $set: {
+                                        advProcessed: true,
+                                        snip20: true,
+                                        token_info:  tinfo.token_info
+                                    }});
+                                }
+
+                            } catch {
+                                
+                                console.log(contracts[i]);
+                                console.log("Error processing SPY contract ", address);
+                                console.log(e);
+
+                            }
+                            
+                        } else {
+                            //console.log(tinfo.token_info);
+                            bulkContracts.find({ address: contracts[i].address }).updateOne({ $set: {
+                                advProcessed: true,
+                                snip20: true,
+                                token_info:  tinfo.token_info
+                            }});
                         }
-                        //console.log(tinfo.token_info);
-                        bulkContracts.find({ address: contracts[i].address }).updateOne({ $set: {
-                            advProcessed: true,
-                            snip20: true,
-                            token_info:  tinfo.token_info
-                        }});
                     } else {
                         bulkContracts.find({ address: contracts[i].address }).updateOne({ $set: {
                             advProcessed: true,
@@ -78,8 +119,8 @@ Meteor.methods({
                 }
                 catch (e) {
 
-                    console.log("Processing contract token_info ", address);
                     console.log(contracts[i]);
+                    console.log("Processing contract token_info ", address);
                     console.log(e);
                     //bulkContracts.find({ txhash: transactions[i].txhash }).updateOne({ $set: { processed: false, missing: true } });
                 }
@@ -291,8 +332,13 @@ Meteor.methods({
 
 
                     //update Swap Contract
-                    let name = "SecretSwap: " + swap_info.assets[0].symbol + "-" + swap_info.assets[1].symbol;
-                    let desc = "SecretSwap pair for tokens: " + assets[0].address + " (" + assets[0].symbol + ") and " + assets[1].address + " (" + assets[1].symbol + ")";
+                    if (swap_info.assets[0].symbol && swap_info.assets[1].symbol) {
+                        var name = "SecretSwap: " + swap_info.assets[0].symbol + "-" + swap_info.assets[1].symbol;
+                        var desc = "SecretSwap pair for tokens: " + assets[0].address + " (" + assets[0].symbol + ") and " + assets[1].address + " (" + assets[1].symbol + ")";
+                    } else {
+                        var name;
+
+                    }
                     console.log(name, desc);
                     bulkContracts.find({ address: sswapTokens[i].contract_addr }).updateOne({ $set: {
                         secretSwapPair: true,
@@ -302,8 +348,8 @@ Meteor.methods({
                     }});
 
                     //update LP Contract
-                    let lpname = "SSWAP-LP " + assets[0].symbol + "-" + assets[1].symbol;
-                    let lpdesc = "SecretSwap LP Token for swap " + swap_info.contract_addr + " (" + assets[0].symbol + "-" + assets[1].symbol + ")";
+                    let lpname = "SSWAP-LP " + swap_info.assets[0].symbol + "-" + swap_info.assets[1].symbol;
+                    let lpdesc = "SecretSwap LP Token for swap " + swap_info.contract_addr + " (" + swap_info.assets[0].symbol + "-" + swap_info.assets[1].symbol + ")";
                     //console.log(lpname, lpdesc);
                     
                     bulkContracts.find({ address: sswapTokens[i].liquidity_token }).updateOne({ $set: {
