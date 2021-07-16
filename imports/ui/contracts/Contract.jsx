@@ -51,23 +51,23 @@ export default class Contract extends Component {
                         </Alert>
                     </Col></Row> : ''}
                     <Card>
-                        <div className="card-header"><T>common.information</T></div>
+                        <div className="card-header"><T>contracts.contract_info</T></div>
                         <CardBody>
                             <Row>
-                                <Col md={4} className="label"><T>common.address</T></Col>
-                                <Col md={8} className="value text-nowrap overflow-auto address">{tx.address}</Col>
-                                <Col md={4} className="label"><T>contracts.label</T></Col>
-                                <Col md={8} className="value text-nowrap overflow-auto address">{tx.label}</Col>
-                                <Col md={4} className="label"><T>contracts.creator</T></Col>
-                                <Col md={8} className="value"><Account address={tx.creator}/></Col>
-                                <Col md={4} className="label"><T>contracts.codeId</T></Col>
-                                <Col md={8} className="value text-nowrap overflow-auto address">{tx.code_id}</Col>
+                                <Col md={3} className="label"><T>common.address</T></Col>
+                                <Col md={9} className="value text-nowrap overflow-auto address">{tx.address}</Col>
+                                <Col md={3} className="label"><T>contracts.creator</T></Col>
+                                <Col md={9} className="value text-nowrap overflow-auto address"><Account address={tx.creator}/></Col>
+                                <Col md={3} className="label"><T>contracts.codeId</T></Col>
+                                <Col md={9} className="value text-nowrap overflow-auto">{tx.code_id}</Col>
+                                <Col md={3} className="label"><T>contracts.label</T></Col>
+                                <Col md={9} className="value overflow-auto">{tx.label}</Col>
                                 {/*
-                                <Col md={4} className="label"><T>transactions.executions</T></Col>
-                                <Col md={8} className="value">{execs}</Col>
+                                <Col md={3} className="label"><T>transactions.executions</T></Col>
+                                <Col md={9} className="value">{execs}</Col>
                                 
-                                <Col md={4} className="label"><T>transactions.memo</T></Col>
-                                <Col md={8} className="value"><Markdown markup={tx?.tx?.value?.memo} /></Col>
+                                <Col md={3} className="label"><T>transactions.memo</T></Col>
+                                <Col md={9} className="value"><Markdown markup={tx?.tx?.value?.memo} /></Col>
                                 */}
 
                             </Row>
@@ -77,49 +77,56 @@ export default class Contract extends Component {
                     </Card>
                     {tx.token_info?
                     <Card>
-                        <div className="card-header"><T>common.snip20info</T></div>
+                        <div className="card-header"><T>contracts.token_info</T></div>
                         <CardBody>
                             <Row>
-                                <Col md={4} className="label"><T>common.name</T></Col>
-                                <Col md={8} className="value text-nowrap overflow-auto address">{tx.token_info.name}</Col>
-                                <Col md={4} className="label"><T>common.symbol</T></Col>
-                                <Col md={8} className="value text-nowrap overflow-auto address">{tx.token_info.symbol}</Col>
-                                <Col md={4} className="label"><T>common.decimals</T></Col>
-                                <Col md={8} className="value text-nowrap overflow-auto address">{tx.token_info.decimals}</Col>
-                                <Col md={4} className="label"><T>common.total_supply</T></Col>
-                                <Col md={8} className="value text-nowrap overflow-auto address">{coinConvert(tx.token_info.total_supply, tx.token_info.decimals, 'human', 4)}</Col>
+                                <Col md={3} className="label"><T>contracts.name</T></Col>
+                                <Col md={9} className="value overflow-auto">{tx.token_info.name}</Col>
+                                <Col md={3} className="label"><T>contracts.symbol</T></Col>
+                                <Col md={9} className="value text-nowrap overflow-auto">{tx.token_info.symbol}</Col>
+                                <Col md={3} className="label"><T>contracts.decimals</T></Col>
+                                <Col md={9} className="value text-nowrap overflow-auto">{tx.token_info.decimals}</Col>
+                                {contracts.total_supply?
+                                    <Col md={3} className="label"><T>contracts.total_supply</T></Col>
+                                    : null }
+                                {contracts.total_supply?
+                                    <Col md={9} className="value text-nowrap overflow-auto">{coinConvert(tx.token_info.total_supply, tx.token_info.decimals, 'human', 4)}</Col>
+                                : null }
                             </Row>
                         </CardBody>
                     </Card>:null}
                     {tx.bridge_info?
                     <Card>
-                        <div className="card-header"><T>common.brodgeinfo</T></div>
+                        <div className="card-header"><T>contracts.bridge_info</T></div>
                         <CardBody>
                             <Row>
-                                <Col md={4} className="label"><T>common.name</T></Col>
-                                <Col md={8} className="value text-nowrap overflow-auto address">{tx.bridge_info.name}</Col>
-                                <Col md={4} className="label"><T>common.symbol</T></Col>
-                                <Col md={8} className="value text-nowrap overflow-auto address">{tx.bridge_info.symbol}</Col>
-                                <Col md={4} className="label"><T>common.source</T></Col>
-                                <Col md={8} className="value text-nowrap overflow-auto address">{tx.bridge_info.src_network}</Col>
-                                <Col md={4} className="label"><T>common.sourceaddr</T></Col>
-                                <Col md={8} className="value text-nowrap overflow-auto address">{tx.bridge_info.src_address}</Col>
+                                <Col md={3} className="label"><T>contracts.name</T></Col>
+                                <Col md={9} className="value text-nowrap overflow-auto">{tx.bridge_info.name}</Col>
+                                <Col md={3} className="label"><T>contracts.symbol</T></Col>
+                                <Col md={9} className="value text-nowrap overflow-auto">{tx.bridge_info.symbol}</Col>
+                                <Col md={3} className="label"><T>contracts.source_network</T></Col>
+                                <Col md={9} className="value text-nowrap overflow-auto">{tx.bridge_info.src_network}</Col>
+                                <Col md={3} className="label"><T>contracts.sourceaddr</T></Col>
+                                <Col md={9} className="value text-nowrap overflow-auto address">{tx.bridge_info.src_address}</Col>
                             </Row>
                         </CardBody>
                     </Card>:null}
                     {tx.sswap_info?
                     <Card>
-                        <div className="card-header"><T>common.swapinfo</T></div>
+                        <div className="card-header"><T>contracts.secretswap_info</T></div>
                         <CardBody>
                             <Row>
-                                <Col md={4} className="label"><T>common.name</T></Col>
-                                <Col md={8} className="value text-nowrap overflow-auto address">{tx.name}</Col>
-                                <Col md={4} className="label"><T>common.desc</T></Col>
-                                <Col md={8} className="value text-nowrap overflow-auto address">{tx.description}</Col>
-                                <Col md={4} className="label"><T>common.lptoken</T></Col>
-                                <Col md={8} className="value text-nowrap overflow-auto address">{tx.sswap_info.lp_token_addr}</Col>
-                                <Col md={4} className="label"><T>common.assets</T></Col>
-                                <Col md={8} className="value text-nowrap overflow-auto address">{tx.sswap_info.assets[0].address}<br/>{tx.sswap_info.assets[1].address}</Col>
+                                <Col md={3} className="label"><T>contracts.name</T></Col>
+                                <Col md={9} className="value text-nowrap overflow-auto address">{tx.name}</Col>
+                                {/*
+                                <Col md={3} className="label"><T>contracts.desc</T></Col>
+                                <Col md={9} className="value text-nowrap overflow-auto address">{tx.description}</Col>
+                                */}
+                                <Col md={3} className="label"><T>contracts.lptoken</T></Col>
+                                <Col md={9} className="value text-nowrap overflow-auto address"><Account address={tx.sswap_info.lp_token_addr}/></Col>
+                                <Col md={3} className="label"><T>contracts.swap_tokens</T></Col>
+                                <Col md={2}  className="value text-nowrap overflow-auto address">{tx.sswap_info.assets[0].symbol}<br/>{tx.sswap_info.assets[1].symbol}</Col>
+                                <Col md={7} className="value text-nowrap overflow-auto address"><Account address={tx.sswap_info.assets[0].address}/><br/><Account address={tx.sswap_info.assets[1].address}/></Col>
                             </Row>
                         </CardBody>
                     </Card>:null}

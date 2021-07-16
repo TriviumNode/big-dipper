@@ -18,19 +18,19 @@ export const ContractRow = (props) => {
 
     return <SentryBoundary><Row className="tx-info"> {/*className={(tx.code) ? "tx-info invalid" : "tx-info"}*/}
         
-        <Col xs={12} lg={5} className="text-truncate">
-            <Link to={"/contracts/"+props.ct.address}>{props.ct.label}</Link>
+        <Col xs={12} lg={5}>
+            <Link to={"/contracts/"+props.ct.address}>{props.ct.name?props.ct.name:props.ct.label}</Link>
         </Col>
 
-        <Col xs={4} lg={3} className="activity">
+        <Col xs={5} lg={3} className="address text-truncate">
             <span>{props.ct.address}</span>
         </Col>
 
-        <Col xs={4} lg={1}>
+        <Col xs={2} lg={1}>
             <span>{props.ct.code_id}</span>
         </Col>
 
-        <Col xs={4} lg={3} className="activity">
+        <Col xs={5} lg={3} className="address text-truncate">
             <span>{props.ct.creator}</span>
         </Col>
     </Row></SentryBoundary>

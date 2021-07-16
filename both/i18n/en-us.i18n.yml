@@ -37,6 +37,19 @@ contracts:
     migrate: 'Migrate'
     storecode: 'Store Code'
     updateadmin: 'Update Admin'
+    name: 'Name'
+    symbol: 'Symbol'
+    decimals: 'Decimals'
+    total_supply: 'Total Supply'
+    source_network: 'Source Network'
+    sourceaddr: 'Source Address'
+    contract_info: 'Contract Information'
+    token_info: 'Token Information'
+    bridge_info: "Bridge Information"
+    secretswap_info: "SecretSwap Pair Information"
+    desc: 'Description'
+    lptoken: 'LP Token Address'
+    swap_tokens: 'Swap Tokens'
 navbar:
     siteName: 'BIG DIPPER'
     version: '-'
