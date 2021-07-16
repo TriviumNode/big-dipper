@@ -22,11 +22,11 @@ Meteor.methods({
             $and: [{
                 $or: [
                         { "tx.value.msg.0.type": "wasm/MsgExecuteContract" },
-                        { "tx.msgType": "wasm/MsgMsgClearAdmin" },
-                        { "tx.msgType": "wasm/MsgInstantiateContract" },
-                        { "tx.msgType": "wasm/MsgMigrateContract" },
-                        { "tx.msgType": "wasm/MsgStoreCode" },
-                        { "tx.msgType": "wasm/MsgUpdateAdmin" }
+                        { "tx.value.msg.0.type": "wasm/MsgMsgClearAdmin" },
+                        { "tx.value.msg.0.type": "wasm/MsgInstantiateContract" },
+                        { "tx.value.msg.0.type": "wasm/MsgMigrateContract" },
+                        { "tx.value.msg.0.type": "wasm/MsgStoreCode" },
+                        { "tx.value.msg.0.type": "wasm/MsgUpdateAdmin" }
                     ]
                 },
                 { contractProcessed: false }
