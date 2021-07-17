@@ -63,7 +63,7 @@ export default class SecretSwapLiquidity extends Component{
             }
         });
 
-        Meteor.call('secretswaps.userSwaps', this.state.user, (error, result) => {
+        Meteor.call('secretswaps.stakelist', this.state.user, (error, result) => {
             if (error){
                 console.warn(error);
                 this.setState({

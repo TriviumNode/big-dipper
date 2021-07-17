@@ -51,7 +51,7 @@ Meteor.methods({
                     let response = HTTP.get(url);
                     let tinfo = JSON.parse(response.content || response);
                     if (tinfo) {
-                        if (tinfo.symbol?.includes("SPY")) {
+                        if (tinfo.token_info.symbol.includes("SPY")) {
                             try {
                                 url1 = queryProxy + '?query=reward_token&contract=' + address;
                                 let response1 = HTTP.get(url1);

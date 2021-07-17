@@ -28,6 +28,19 @@ Meteor.methods({
         //console.log("CONTRACTSSSS:", contracts.length);
         return contracts;
     },
+    'secretswaps.stakelist': async function () {
+        //console.log("Counting tokens...");
+        this.unblock();            
+        //const contracts = Transactions.find({ processed: false }, { limit: 500 }).fetch();
+        const contracts = Contracts.find({$and: [
+            { "token_info.symbol": /.*SPY.*/ },
+            { incentivized_token: { $exists: true } }
+        ]}).fetch();
+        console.log(contracts);
+        //console.log(trans[80].tx.value.msg);
+        //console.log("CONTRACTSSSS:", contracts.length);
+        return contracts;
+    },
     'secretswaps.userSwaps': async function (userAddress) {
         console.log("USERSWAPS...");
         this.unblock();            
@@ -40,7 +53,6 @@ Meteor.methods({
                     { "tx.value.msg.0.value.sender": userAddress }
                 ]}, { limit: 1}).fetch();
             //console.log(yes.length);
-
             if (yes.length > 0) {
                 usedSwaps.push(swaps[i]);
                 //console.log(usedSwaps.length);
@@ -53,6 +65,26 @@ Meteor.methods({
         //console.log(trans[80].tx.value.msg);
         //console.log("CONTRACTSSSS:", contracts.length);
         return usedSwaps;
+    },
+    'secretswaps.userStakes': async function (userAddress) {
+        this.unblock();            
+
+        var userStakes = [];
+        let stakes = Meteor.call('secretswaps.stakelist');
+
+        for (let i in stakes) {
+            let yes = Transactions.find({$and: [
+                    { "tx.value.msg.0.value.contract": stakes[i].address },
+                    { "tx.value.msg.0.value.sender": userAddress }
+                ]}, { limit: 1}).fetch();
+            //console.log(yes.length);
+            if (yes.length > 0) {
+                userStakes.push(stakes[i]);
+                //console.log(userStakes.length);
+            }
+        }
+
+        return userStakes;
     },
     /*
     'Contracts.executions': function(contractAddress){
