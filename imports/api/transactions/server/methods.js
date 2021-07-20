@@ -30,11 +30,11 @@ Meteor.methods({
             
                 }
                 catch(e) {
-                    console.log("Getting transaction %o: %o", hash, e);
+                    console.log("Error getting transaction %o: %o", hash, e);
                 }
             }
             if (bulkTransactions.length > 0){
-                console.log("aaa: %o",bulkTransactions.length)
+                console.log("Insert Txs: %o",bulkTransactions.length)
                 bulkTransactions.execute((err, result) => {
                     if (err){
                         console.log(err);
