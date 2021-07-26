@@ -178,6 +178,16 @@ export class Keplr {
         };
         return unsignedTx;
     }
+
+    async decryptTx(tx) {
+        //console.log(tx);
+        await this.connect()
+
+        const response = await this.secretJs.restClient.decryptTxsResponse(tx)
+        //console.log(response);
+
+        return response;
+    }
 }
 
 

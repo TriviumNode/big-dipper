@@ -14,6 +14,7 @@ export default class TransactionTabs extends Component{
             activeTab: this.props.activeTab || 'tx-transfer',
             transferTxs: {},
             contractTxs: {},
+            decryptedContractTxs: {},
             stakingTxs: {},
             distributionTxs: {},
             governanceTxs: {},
@@ -34,6 +35,7 @@ export default class TransactionTabs extends Component{
             this.setState({
                 transferTxs: this.props.transferTxs,
                 contractTxs: this.props.contractTxs,
+                decryptedContractTxs: this.props.decryptedContractTxs,
                 stakingTxs: this.props.stakingTxs,
                 distributionTxs: this.props.distributionTxs,
                 governanceTxs: this.props.governanceTxs,
@@ -119,6 +121,7 @@ export default class TransactionTabs extends Component{
                                         key={i} 
                                         index={i} 
                                         tx={tx}
+                                        decrypted={this.state.decryptedContractTxs[i]}
                                         blockList 
                                     />
                                 }):''}
