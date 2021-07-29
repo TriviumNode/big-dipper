@@ -1,7 +1,7 @@
 
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { Row, Col, Card, Alert, UncontrolledPopover, PopoverHeader, PopoverBody } from 'reactstrap';
+import { Row, Col, Card, CardTitle, CardText, Alert, UncontrolledPopover, PopoverHeader, PopoverBody, CardBody } from 'reactstrap';
 import { TxIcon } from '../components/Icons.jsx';
 import Activities from '../components/Activities.jsx';
 import CosmosErrors from '../components/CosmosErrors.jsx';
@@ -16,8 +16,23 @@ showdown.setFlavor('github');
 
 export const TransactionRow = (props) => {
     let tx = props.tx;
+    var decrypted = {}
     //let dtx = props.decrypted;
-    console.log(props);
+    //console.log(props);
+    if (props.decrypted) {
+        decrypted = JSON.parse(props.decrypted.tx.value.msg[0].value.msg.substring(props.decrypted.tx.value.msg[0].value.msg.indexOf("{")), null, 4)
+        if (decrypted.send?.msg) {
+            //console.log(atob(decrypted.send.msg))
+            try {
+                decrypted.send.msg = JSON.parse(atob(decrypted.send.msg))
+                //console.log(JSON.stringify(decrypted.send.msg))
+                //console.log(decrypted)
+            } catch {
+                decrypted.send.msg = atob(decrypted.send.msg)
+            }
+        }
+    }
+    
      
     return <SentryBoundary>
     <Row className={(tx.code)?"tx-info invalid":"tx-info"}>
@@ -47,6 +62,18 @@ export const TransactionRow = (props) => {
         <Col xs={(!props.blockList)?6:8} md={(!props.blockList)?9:4} lg={1} className="fee"><i className="material-icons d-lg-none">monetization_on</i> {(tx.tx.value.fee.amount.length > 0)?tx.tx.value.fee.amount.map((fee,i) => {
             return <span className="text-nowrap" key={i}>{(new Coin(parseFloat(fee.amount), (fee)?fee.denom:null)).stakeString()}</span>
         }):<span>No fee</span>}</Col>
+        
+        {props.decrypted?
+        <Col xs={12} lg={{size:8, order:4}}>
+            <Card body>
+                <CardTitle>Execution Message</CardTitle>
+                <CardText><pre>{JSON.stringify(decrypted, null, "\t")}</pre></CardText>
+                
+            {/* JSON.stringify(JSON.parse(props.decrypted.tx.value.msg[0].value.msg.substring(props.decrypted.tx.value.msg[0].value.msg.indexOf("{")), null, 4))*/}
+            {/*<span>{props.decrypted.tx.value.msg[0].value.msg.substring(props.decrypted.tx.value.msg[0].value.msg.indexOf("{"))}</span>*/}
+            </Card>
+        </Col>
+        :null}
 
         {(tx.code)?
             <Col xs={{size:12, order:"last"}} className="error">
@@ -60,14 +87,7 @@ export const TransactionRow = (props) => {
             </Col>
         :''}
 
-        {props.decrypted?
 
-        <Col xs={8}>
-            <Card>
-            { JSON.stringify(JSON.parse(props.decrypted.tx.value.msg[0].value.msg.substring(props.decrypted.tx.value.msg[0].value.msg.indexOf("{")), null, 4))}
-            {/*<span>{props.decrypted.tx.value.msg[0].value.msg.substring(props.decrypted.tx.value.msg[0].value.msg.indexOf("{"))}</span>*/}
-            </Card>
-        </Col>
-        :null}
-    </Row></SentryBoundary>
+    </Row>
+    </SentryBoundary>
 }
