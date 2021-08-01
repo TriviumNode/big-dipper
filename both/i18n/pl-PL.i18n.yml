@@ -25,7 +25,8 @@ common:
     retry: 'Spróbuj ponownie'
     rewards: 'Nagrody'
 navbar:
-    siteName: 'Wielki Wóz'
+    siteName: 'Trivium Explorer'
+    explorer: 'Explorer'
     validators: 'Walidatorzy'
     blocks: 'Bloki'
     transactions: 'Transakcje'
@@ -41,7 +42,7 @@ navbar:
     simChinese: "中文（简）"
     portuguese: "Português"
     license: 'LICENCJA'
-    forkMe: 'Fork me!'
+    forkMe: 'Based on Big Dipper'
 consensus:
     consensusState: 'Status Konsensusu'
     round: 'Runda'

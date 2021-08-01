@@ -25,7 +25,8 @@ common:
     retry: 'Tentar novamente'
     rewards: 'Recompensas'
 navbar:
-    siteName: 'BIG DIPPER'
+    siteName: 'Trivium Explorer'
+    explorer: 'Explorer'
     validators: 'Validadores'
     blocks: 'Blocos'
     transactions: 'Transações'
@@ -40,7 +41,7 @@ navbar:
     simChinese: "中文（简）"
     portuguese: "Português"
     license: 'LICENÇA'
-    forkMe: 'Fork me!'
+    forkMe: 'Based on Big Dipper'
 consensus:
     consensusState: 'Estado de consenso'
     round: 'Rodada'

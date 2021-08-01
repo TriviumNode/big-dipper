@@ -1,5 +1,5 @@
 {
-  "name": "@forbole/big-dipper",
+  "name": "@triviumnode/trivium-explorer",
   "private": true,
   "scripts": {
     "start": "meteor run",

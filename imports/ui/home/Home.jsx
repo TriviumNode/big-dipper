@@ -16,8 +16,8 @@ export default class Home extends Component{
     render() {
         return <div id="home">
             <Helmet>
-                <title>The Big Dipper | Cosmos Explorer by Forbole</title>
-                <meta name="description" content="Cosmos is a decentralized network of independent parallel blockchains, each powered by BFT consensus algorithms like Tendermint consensus." />
+                <title>{Meteor.settings.public.explorerName} | {Meteor.settings.public.chainName} Explorer</title>
+                <meta name="description" content={Meteor.settings.public.chainName+" is a decentralized network supporting private smart contracts, powered by Tendermint consensus."} />
             </Helmet>
             <ChainInfo/>
             <Consensus />

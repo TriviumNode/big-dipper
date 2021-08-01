@@ -37,7 +37,7 @@ export default class Contract extends Component {
                 console.log(tx);
                 return <Container id="transaction">
                     <Helmet>
-                        <title>Contract {tx.label} on Cosmos Hub | The Big Dipper</title>
+                        <title>Contract {tx.label} on {Meteor.settings.public.chainName} | {Meteor.settings.public.explorerName}</title>
                         <meta name="description" content={"Details of contract " + tx.address} />
                     </Helmet>
                     <h4><T>contracts.contract</T> {tx.address}</h4>

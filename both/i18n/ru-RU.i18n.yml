@@ -25,7 +25,8 @@ common:
     retry: 'Повторить попытку'
     rewards: 'награды'
 navbar:
-    siteName: 'BIG DIPPER'
+    siteName: 'Trivium Explorer'
+    explorer: 'Explorer'
     validators: 'валидаторы'
     blocks: 'блоки'
     transactions: 'транзакции'
