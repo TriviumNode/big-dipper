@@ -85,8 +85,8 @@ export default class Contracts extends Component{
     render(){
         return <div id="contracts">
             <Helmet>
-                <title>Contracts on  | The Big Dipper</title>
-                <meta name="description" content="See live contracts on network" />
+                <title>Contracts on {Meteor.settings.public.chainName} | {Meteor.settings.public.explorerName}</title>
+                <meta name="description" content={Meteor.settings.public.chainName+" incorporates private smart contracts. See contracts currently deployedto the network with "+Meteor.settings.public.explorerName+"."} />
             </Helmet>
             <Row>
                 <Col md={3} xs={12}><h1 className="d-none d-lg-block"><T>contracts.contracts</T></h1></Col>

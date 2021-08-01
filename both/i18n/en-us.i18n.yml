@@ -53,7 +53,8 @@ contracts:
     lptoken: 'LP Token Address'
     swap_tokens: 'Swap Tokens'
 navbar:
-    siteName: 'BIG DIPPER'
+    siteName: 'Trivium Explorer'
+    explorer: 'Explorer'
     version: '-'
     validators: 'Validators'
     blocks: 'Blocks'
@@ -70,7 +71,7 @@ navbar:
     simChinese: "中文（简）"
     portuguese: "Português"
     license: 'LICENSE'
-    forkMe: 'Fork me!'
+    forkMe: 'Based on Big Dipper'
 consensus:
     consensusState: 'Consensus State'
     round: 'Round'

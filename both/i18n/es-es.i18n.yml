@@ -24,7 +24,8 @@ common:
     cancel: 'Cancelar'
     retry: 'Reintentar'
 navbar:
-    siteName: 'BIG DIPPER'
+    siteName: 'Trivium Explorer'
+    explorer: 'Explorer'
     validators: 'Validadores'
     blocks: 'Bloques'
     transactions: 'Transacciones'
@@ -40,7 +41,7 @@ navbar:
     simChinese: "中文（简）"
     portuguese: "Português"
     license: 'LICENCIA'
-    forkMe: 'Fork me!'
+    forkMe: 'Based on Big Dipper'
 consensus:
     consensusState: 'Estado de consenso'
     round: 'Ronda'

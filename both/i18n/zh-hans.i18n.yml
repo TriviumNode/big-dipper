@@ -24,7 +24,8 @@ common:
     cancel: '取消'
     retry: '重试'
 navbar:
-    siteName: '北斗'
+    siteName: 'Trivium Explorer'
+    explorer: 'Explorer'
     validators: '验证人'
     blocks: '区块'
     transactions: '交易'
@@ -40,7 +41,7 @@ navbar:
     simChinese: "中文（简）"
     portuguese: "Português"
     license: 'LICENSE'
-    forkMe: 'Fork me!'
+    forkMe: 'Based on Big Dipper'
 consensus:
     consensusState: '共识状态'
     round: '轮数'
