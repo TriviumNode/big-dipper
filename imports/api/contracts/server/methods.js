@@ -144,7 +144,7 @@ Meteor.methods({
         const contracts = Contracts.find({},
         {
             //sort: { height: -1 },
-            limit: 100,
+            //limit: 100,
             //projection: { 'tx.type': 1 }
         }
         ).fetch();
