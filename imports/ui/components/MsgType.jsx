@@ -56,7 +56,7 @@ export const MsgType = (props) => {
     case "wasm/MsgClearAdmin":
         return <Badge style={{ backgroundColor: "#01b49e" }}><T>contracts.clearadmin</T></Badge>
     case "wasm/MsgInstantiateContract":
-        return <Badge style={{ backgroundColor: "#01b49e" }}><T>contracts.instantiate</T></Badge>
+        return <Badge style={{ backgroundColor: "#01b49e" }}><T>contracts.initialize</T></Badge>
     case "wasm/MsgMigrateContract":
         return <Badge style={{ backgroundColor: "#01b49e" }}><T>contracts.migrate</T></Badge>
     case "wasm/MsgStoreCode":
