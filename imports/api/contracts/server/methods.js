@@ -37,7 +37,7 @@ Meteor.methods({
         },
         {
             //sort: { height: -1 },
-            limit: 10,
+            limit: 50,
             //projection: { 'tx.type': 1 }
         }
         ).fetch();
