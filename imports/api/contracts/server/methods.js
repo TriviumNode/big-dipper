@@ -22,11 +22,11 @@ Meteor.methods({
             $and: [{
                 $or: [
                         { "tx.value.msg.0.type": "wasm/MsgExecuteContract" },
-                        { "tx.msgType": "wasm/MsgMsgClearAdmin" },
-                        { "tx.msgType": "wasm/MsgInstantiateContract" },
-                        { "tx.msgType": "wasm/MsgMigrateContract" },
-                        { "tx.msgType": "wasm/MsgStoreCode" },
-                        { "tx.msgType": "wasm/MsgUpdateAdmin" }
+                        //{ "tx.msgType": "wasm/MsgMsgClearAdmin" },
+                        { "tx.value.msg.0.type": "wasm/MsgInstantiateContract" },
+                        //{ "tx.msgType": "wasm/MsgMigrateContract" },
+                        //{ "tx.msgType": "wasm/MsgStoreCode" },
+                        //{ "tx.msgType": "wasm/MsgUpdateAdmin" }
                     ]
                 },
                 { contractProcessed: false }
@@ -46,35 +46,49 @@ Meteor.methods({
             const bulkContracts = Contracts.rawCollection().initializeUnorderedBulkOp();
             const bulkTransactions = Transactions.rawCollection().initializeUnorderedBulkOp();
             for (let i in contracts) {
-                let url = "";
-                var address = "";
-                //TODO: Look at other contract message types
-                if (contracts[i].tx.value.msg[0].type.includes("Instantiate") ) {
-                    address = contracts[i].logs[0].events[0].attributes[4].value;
-                } else {
-                    address = contracts[i].tx.value.msg[0].value.contract;
-                }
-                
-                try {
-                    url = LCD + '/wasm/contract/' + address;
-                    let response = HTTP.get(url);
-                    let ct = JSON.parse(response.content || response);
-                    //console.log(ct);
-                
-                    ct.result.advProcessed = false;
 
-                    bulkTransactions.find({ txhash: contracts[i].txhash }).updateOne({ $set: { contractProcessed: true }});
-                    bulkContracts.insert(ct.result);
-                    //console.log("would insert:");
-                    //console.log(ct.result);
-
-                }
-                catch (e) {
-
-                    console.log("Getting contract ", address);
+                //skip failed contract initializations
+                if ((contracts[i].raw_log.includes("failed") || contracts[i].raw_log.includes("out of gas")) && contracts[i].tx.value.msg[0].type.includes("Instantiate")) {
+                    console.log("failed init");
                     console.log(contracts[i]);
-                    console.log(e);
-                    //bulkContracts.find({ txhash: transactions[i].txhash }).updateOne({ $set: { processed: false, missing: true } });
+                    bulkTransactions.find({ txhash: contracts[i].txhash }).updateOne({ $set: { contractProcessed: true }});
+
+                //skip invalid contract address
+                } else if (contracts[i].raw_log.includes("not found: contract:")){
+                    console.log("invlaid addr");
+                    console.log(contracts[i]);
+                    bulkTransactions.find({ txhash: contracts[i].txhash }).updateOne({ $set: { contractProcessed: true }});
+                    
+                } else {
+                    var address = "";
+
+                    //TODO: Look at other contract message types
+                    if (contracts[i].tx.value.msg[0].type.includes("Instantiate") ) {
+                        console.log("NEW CONTRACT");
+                        console.log(contracts[i])
+                        console.log(contracts[i].logs[0].events[0].attributes[4].value);
+
+                        address = contracts[i].logs[0].events[0].attributes[4].value;
+                    } else {
+                        address = contracts[i].tx.value.msg[0].value.contract;
+                    }
+                    
+                    try {
+                        let url = LCD + '/wasm/contract/' + address;
+                        let response = HTTP.get(url);
+                        let ct = JSON.parse(response.content || response);
+
+                        ct.result.advProcessed = false;
+
+                        bulkTransactions.find({ txhash: contracts[i].txhash }).updateOne({ $set: { contractProcessed: true }});
+                        bulkContracts.insert(ct.result);
+                    }
+                    catch (e) {
+                        console.log("Error getting contract");
+                        console.log(contracts[i]);
+                        console.log(e);
+                        //bulkContracts.find({ txhash: transactions[i].txhash }).updateOne({ $set: { processed: false, missing: true } });
+                    }
                 }
             }
             
@@ -89,7 +103,7 @@ Meteor.methods({
                         }
                     }
                     if (result) {
-                        //console.log(result);
+                        console.log(result);
                     }
                 });
             }
@@ -131,9 +145,7 @@ Meteor.methods({
             //projection: { 'tx.type': 1 }
         }
         ).fetch();
-        //console.log(trans);
-        //console.log(trans[80].tx.value.msg);
-        //console.log("CONTRACTSSSS:", contracts.length);
+
         return contracts.length;
     },
     'Contracts.executions': function(contractAddress){
