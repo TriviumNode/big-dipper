@@ -2,6 +2,7 @@
     "public":{
         "chainName": "Cosmos Testnet",
         "chainId": "{Chain ID}",
+        "explorerName": "The Big Dipper",
         "gtm": "{Add your Google Tag Manager ID here}",
         "slashingWindow": 10000,
         "uptimeWindow": 250,
@@ -58,7 +59,8 @@
         "missedBlocksInterval": 60000,
         "delegationInterval": 900000,
         "contractsInterval": 30000,
-        "testInterval": 120000
+        "testInterval": 120000,
+        "enigmaInterval": 1800000
     }
 }
 
