@@ -9,6 +9,7 @@ import { error } from 'jquery';
 const AddressLength = 40;
 
 Meteor.methods({
+    //import contracts from transactions
     'Contracts.updateContracts': async function () {
         //console.log("Updating contracts...");
         this.unblock();
@@ -129,6 +130,8 @@ Meteor.methods({
         CTSYNCING = false;
         return contracts.length
     },
+
+    //find all contracts
     'Contracts.showContracts': async function () {
         console.log("Finding contracts...");
         this.unblock();
@@ -148,6 +151,8 @@ Meteor.methods({
 
         return contracts.length;
     },
+
+    //return count of execution transactions for a contract
     'Contracts.executions': function(contractAddress){
         this.unblock();
         if (CTSYNCING)
@@ -163,6 +168,8 @@ Meteor.methods({
 
         return contracts.length;
     },
+
+    //find single contract
     'Contracts.findOne': function(contractAddress){
         this.unblock();
         if (CTSYNCING)
