@@ -379,7 +379,7 @@ export default class AccountDetails extends Component{
                 </Row>
                 <Row>
                     <Col>
-                        <AccountTransactions delegator={this.state.address} denom={this.state.denom} limit={100}/>
+                        <AccountTransactions delegator={this.state.address} denom={this.state.denom} decrypt={this.state.user===this.state.address&&this.state.wallet==='keplr'?true:false} limit={100}/>
                     </Col>
                 </Row>
             </div>

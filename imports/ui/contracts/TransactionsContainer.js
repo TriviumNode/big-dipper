@@ -27,6 +27,7 @@ export default AccountTransactions = withTracker((props) => {
     return {
         loading,
         transactionsExist,
+        decrypt: false,
         transferTxs: transactionsExist ? Transactions.find({
             $or: [
                 {"tx.value.msg.type":"cosmos-sdk/MsgSend"},

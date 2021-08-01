@@ -14,12 +14,15 @@ export default class ValidatorTransactions extends Component{
         this.WKeplr = new Keplr({ testModeAllowed: false });
         this.state = {
             activeTab: this.props.activeTab || "tx-transfer",
+            decrypt: this.props.decrypt || false,
             transferTxs: {},
             contractTxs: {},
             stakingTxs: {},
             distributionTxs: {},
             governanceTxs: {},
             slashingTxs: {},
+            signedInAddress: localStorage.getItem(CURRENTUSERADDR),
+            signedInWallet: localStorage.getItem(CURRENTUSERWALLET)
         };  
     }
 
@@ -27,7 +30,7 @@ export default class ValidatorTransactions extends Component{
         if (this.props != prevProps){
             if (this.props.transactionsExist){
                 var decryptedContractTxs = [];
-                if (this.props.contractTxs.length > 0) {
+                if (this.props.contractTxs.length > 0 && this.state.decrypt) {
                     
                     for (let i in this.props.contractTxs) {
                         //console.log(this.props.contractTxs[i]);
@@ -57,7 +60,8 @@ export default class ValidatorTransactions extends Component{
                     stakingTxs: this.props.stakingTxs,
                     distributionTxs: this.props.distributionTxs,
                     governanceTxs: this.props.governanceTxs,
-                    slashingTxs: this.props.slashingTxs
+                    slashingTxs: this.props.slashingTxs,
+                    decrypt: this.props.decrypt || false
                 })
                 // console.log("have txs.");
 
@@ -79,6 +83,7 @@ export default class ValidatorTransactions extends Component{
                 distributionTxs={this.state.distributionTxs}
                 governanceTxs={this.state.governanceTxs}
                 slashingTxs={this.state.slashingTxs}
+                decrypt={this.state.decrypt}
             />
         }
         else {

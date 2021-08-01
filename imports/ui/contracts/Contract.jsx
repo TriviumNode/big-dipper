@@ -34,7 +34,6 @@ export default class Contract extends Component {
         else {
             if (this.props.contractExist) {
                 let tx = this.props.contract;
-                console.log(tx);
                 return <Container id="transaction">
                     <Helmet>
                         <title>Contract {tx.label} on Cosmos Hub | The Big Dipper</title>

@@ -12,6 +12,7 @@ export default class TransactionTabs extends Component{
         super(props);
         this.state ={
             activeTab: this.props.activeTab || 'tx-transfer',
+            decrypt: this.props.decrypt || false,
             transferTxs: {},
             contractTxs: {},
             decryptedContractTxs: {},
@@ -122,6 +123,7 @@ export default class TransactionTabs extends Component{
                                         index={i} 
                                         tx={tx}
                                         decrypted={this.state.decryptedContractTxs[i]}
+                                        decrypt={this.state.decrypt}
                                         blockList 
                                     />
                                 }):''}

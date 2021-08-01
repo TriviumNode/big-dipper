@@ -10,30 +10,34 @@ import numbro from 'numbro';
 import Coin from '/both/utils/coins.js'
 import SentryBoundary from '../components/SentryBoundary.jsx';
 import { Markdown } from 'react-showdown';
+import ReactJson from 'react-json-view'
 
 let showdown  = require('showdown');
 showdown.setFlavor('github');
 
+
+
 export const TransactionRow = (props) => {
+
+
+    let signedInAddress = localStorage.getItem(CURRENTUSERADDR);
+    let signedInWallet = localStorage.getItem(CURRENTUSERWALLET);
     let tx = props.tx;
-    var decrypted = {}
-    //let dtx = props.decrypted;
-    //console.log(props);
-    if (props.decrypted) {
+    var decrypted = {};
+
+    if (props.decrypted && signedInWallet === "keplr" && props.decrypt) {
         decrypted = JSON.parse(props.decrypted.tx.value.msg[0].value.msg.substring(props.decrypted.tx.value.msg[0].value.msg.indexOf("{")), null, 4)
         if (decrypted.send?.msg) {
-            //console.log(atob(decrypted.send.msg))
             try {
                 decrypted.send.msg = JSON.parse(atob(decrypted.send.msg))
-                //console.log(JSON.stringify(decrypted.send.msg))
-                //console.log(decrypted)
             } catch {
                 decrypted.send.msg = atob(decrypted.send.msg)
             }
         }
     }
+
     
-     
+
     return <SentryBoundary>
     <Row className={(tx.code)?"tx-info invalid":"tx-info"}>
         <Col xs={12} lg={8} className="activity">
@@ -63,11 +67,12 @@ export const TransactionRow = (props) => {
             return <span className="text-nowrap" key={i}>{(new Coin(parseFloat(fee.amount), (fee)?fee.denom:null)).stakeString()}</span>
         }):<span>No fee</span>}</Col>
         
-        {props.decrypted?
+        {props.decrypt?
         <Col xs={12} lg={{size:8, order:4}}>
             <Card body>
                 <CardTitle>Execution Message</CardTitle>
-                <CardText><pre>{JSON.stringify(decrypted, null, "\t")}</pre></CardText>
+                {/*<CardText><pre>{JSON.stringify(decrypted, null, "\t")}</pre></CardText>*/}
+                <ReactJson src={decrypted}/>
                 
             {/* JSON.stringify(JSON.parse(props.decrypted.tx.value.msg[0].value.msg.substring(props.decrypted.tx.value.msg[0].value.msg.indexOf("{")), null, 4))*/}
             {/*<span>{props.decrypted.tx.value.msg[0].value.msg.substring(props.decrypted.tx.value.msg[0].value.msg.indexOf("{"))}</span>*/}
