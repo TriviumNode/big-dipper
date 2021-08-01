@@ -97,7 +97,7 @@ export default class Activites extends Component {
 
             // cosmwasm
         case "wasm/MsgExecuteContract":
-            return <p><Account address={msg.value.sender} /> {(this.props.invalid) ? <T>activities.execute</T> : ''}<MsgType type={msg.type} /> <T>contracts.contractlc</T> <Account address={msg.value.contract} /><T>common.fullStop</T></p>
+            return <p><Account address={msg.value.sender} /> {(this.props.invalid) ? <T>activities.failedTo</T> : ''}<MsgType type={msg.type} /> <T>contracts.contractlc</T> <Account address={msg.value.contract} /><T>common.fullStop</T></p>
         case "wasm/MsgInstantiateContract":
             return <p><Account address={msg.value.sender} /> {(this.props.invalid) ? <T>activities.initialize</T> : ''}<MsgType type={msg.type} /> <T>contracts.newcontract</T> <Link  to={"/contracts/" + events.message[4].value}>{msg.value.label}</Link><T>common.fullStop</T></p>
 
