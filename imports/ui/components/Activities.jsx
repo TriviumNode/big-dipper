@@ -40,7 +40,6 @@ export default class Activites extends Component {
     }
 
     render(){
-        // console.log(this.props);
         const msg = this.props.msg;
         const events = [];
         for (let i in this.props.events){
@@ -48,7 +47,7 @@ export default class Activites extends Component {
         }
         try {
         switch (msg.type){
-        // bank
+            // bank
         case "cosmos-sdk/MsgSend":
             let amount = '';
             amount = msg.value.amount.map((coin) => new Coin(coin.amount, coin.denom).toString()).join(', ')
@@ -96,13 +95,13 @@ export default class Activites extends Component {
         case "cosmos-sdk/IBCReceiveMsg":
             return <MsgType type={msg.type} />
 
-        // cosmwasm
+            // cosmwasm
         case "wasm/MsgExecuteContract":
             return <p><Account address={msg.value.sender} /> {(this.props.invalid) ? <T>activities.execute</T> : ''}<MsgType type={msg.type} /> <T>contracts.contractlc</T> <Account address={msg.value.contract} /><T>common.fullStop</T></p>
-
         case "wasm/MsgInstantiateContract":
-            return <p><Account address={msg.value.sender} /> {(this.props.invalid) ? <T>activities.initialize</T> : ''}<MsgType type={msg.type} /> <T>contracts.newcontract</T> <Link  to={"/contracts/" + msg.value.contract}>{msg.value.label}</Link><T>common.fullStop</T></p>
+            return <p><Account address={msg.value.sender} /> {(this.props.invalid) ? <T>activities.initialize</T> : ''}<MsgType type={msg.type} /> <T>contracts.newcontract</T> <Link  to={"/contracts/" + events.message[4].value}>{msg.value.label}</Link><T>common.fullStop</T></p>
 
+            // other
         default:
             return <div><ReactJson src={msg.value} /></div>
         }
